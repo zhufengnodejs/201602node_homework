@@ -1,1 +1,11 @@
-11111第一周作业
+第一个作业，blog地址
+http://cool19910317.github.io/
+第二个作业，发布一个npm包
+https://www.npmjs.com/package/saytanxu
+
+npm install saytanxu -g
+
+$ saytanxu
+> i am tanxu
+
+第三个作业，
