@@ -1,0 +1,8 @@
+##1. 创建自己的github博客并提供访问地址
+
+	http://lixiafe.github.io/
+
+
+##2. 发布一个自己的npm模块并提供npmjs地址
+
+	https://www.npmjs.com/package/leafsummer2
