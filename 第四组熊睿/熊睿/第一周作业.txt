@@ -1,0 +1,35 @@
+第一题：创建自己的github博客
+1.npm install hexo -g
+2.hexo init hexo (hexo是创建项目文件夹的名称)
+3.长度hexo && ls 进入项目并查看生成的文件
+4.npm install 添加依赖
+5.hexo server 启动本地访问http://localhost:4000/		
+----》本地运行报错，未解决
+6.npm install hexo-deployer-git --save  添加发布模块
+7.修改配置deploy
+8.hexo deploy
+
+第二题：发布自己的npm模块
+1.新建文件夹 并cd进去
+2.git bash here
+3.npm init 初始化项目
+4.编写入口文件
+5.修改package.json文件添加bin:{'order':'path'}
+6.npm publish
+7.切出目录
+8.npm install 你的项目名称 -g
+9.运行命令
+
+https://www.npmjs.com/search?q=xiongrui
+
+第三题：实现静态服务器
+1.通过req.url获取访问路径将/转为\
+2.通过process.cwd()获取当前执行路径+转换过/的路径得到一个真实的访问路径
+3.通过fs.stat判断是目录还是文件
+4.是目录则列出其下的文件或目录
+5.是文件则返回文件内容
+6.若既不是文件也不是目录会提示找不到
+
+npm install xiongrui-httpserver -g  安装
+xiongrui-server	运行
+启动浏览器访问http://localhost:8000 访问
