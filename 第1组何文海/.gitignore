@@ -30,13 +30,7 @@ node_modules
 .npm
 
 # Optional REPL history
-<<<<<<< HEAD
-.DS_store
-.node_repl_history
-.idea
-node_modules
-=======
 .node_repl_history
 .idea
 .DS_Store
->>>>>>> c1d3b6e0adec1d26fbe7fca86bf19bf743641e4d
+node_modules
