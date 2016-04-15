@@ -1,0 +1,26 @@
+body, div, img {
+    margin: 0;
+    padding: 0;
+}
+
+.wrap {
+    margin: 0 auto;
+    width: 800px;
+    font: 14px/1.5 "Microsoft Yahei";
+}
+
+.wrap h1 {
+    color: #333;
+}
+
+.wrap a {
+    display: block;
+    margin: 10px 0;
+    color: red;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.wrap a:hover {
+    text-decoration: underline;
+}
