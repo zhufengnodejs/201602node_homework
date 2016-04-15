@@ -1,0 +1,12 @@
+npmjsµÿ÷∑:https://www.npmjs.com/search?q=npmpss
+
+≤Ω÷Ë£∫
+mkdir npmpss
+cd npmpss
+npm init
+npm adduser
+npm publish
+cd ..
+npm install npmpss -g
+cd npmpss
+npmpss
