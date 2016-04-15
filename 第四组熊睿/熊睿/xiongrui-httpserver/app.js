@@ -6,11 +6,11 @@ var handleFile = require('./util/handleFile');
 var handleDir = require('./util/handleDir');
 var server = http.createServer(function (req, res) {
     res.setHeader('Content-Type', mine.lookup(req.url)+';charset=utf8;');
-    var cwd = __dirname;
+    var cwd = process.cwd();				//当前执行路径
     if (req.url !== '/favicon.ico') {
         console.log('server started at http://localhost:8000... please enter ctrl+c stop');
         var url = req.url.replace(/\//g, '\\');
-        url = __dirname + url;
+        url = cwd + url;
         console.log(url);
         fs.stat(url, function (err, stats) {
             if (err) {
