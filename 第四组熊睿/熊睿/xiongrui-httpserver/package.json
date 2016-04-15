@@ -1,0 +1,21 @@
+{
+  "name": "xiongrui-httpserver",
+  "version": "1.0.3",
+  "description": "static server",
+  "main": "app.js",
+  "bin":{
+    "xiongrui-server":"./app.js"
+  },
+  "scripts": {
+    "test": "xiongrui-server"
+  },
+  "keywords": [
+    "xiongrui",
+    "server"
+  ],
+  "author": "xiongrui",
+  "license": "MIT",
+  "dependencies": {
+    "mime": "^1.3.4"
+  }
+}
