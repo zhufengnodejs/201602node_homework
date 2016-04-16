@@ -1,0 +1,21 @@
+{
+  "name": "liuqing-httpserver",
+  "version": "1.0.8",
+  "description": "static server",
+  "main": "app.js",
+  "bin":{
+    "liuqing-server":"./app.js"
+  },
+  "scripts": {
+    "test": "liuqing-server"
+  },
+  "keywords": [
+    "liuqing",
+    "server"
+  ],
+  "author": "liuqingdyx",
+  "license": "MIT",
+  "dependencies": {
+    "mime": "^1.3.4"
+  }
+}
