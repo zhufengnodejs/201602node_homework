@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>中文转化成utf8编码</title>
+</head>
+<body>
+	函数名：transfer("珠峰你好")
+	<script type="text/javascript">
+		/*
+		 * 1. 得到珠的unicode码。转成二进制
+		 * 2. 从后往前依次填 入1110xxxx 10xxxxxx 10xxxxxx,不够的补0
+		 * 3. 把个结果转成16进制
+		 */
+		transfer("珠峰你好");
+		function transfer(char) {
+		    if (typeof char === "string") {
+		        var charLen = char.length;
+		        if (charLen === 1) {
+		            transForOne(char);
+		        } else {
+		            var res = "",
+		                eachRes = "";
+		            for (var i = 0; i < charLen; i++) {
+		                eachRes = transForOne(char[i]);
+		                res += char[i] + "-->" + eachRes + "\n";
+		            }
+		            console.log(res);
+		        }
+		    } else {
+		        console.log("请确定您传入的参数的类型(string类型)")
+		    }
+		}
+		function transForOne(char) {
+		    //将字符转为二进制
+		    var bin = char.charCodeAt().toString(2);
+		    var lastStr = bin.substr(-6),              //截取最后六位字符串
+		        midStr = bin.substr(-12, 6),           //截取中间六位字符串
+		        index = bin.indexOf(midStr),           //获取剩下几位的后一位索引
+		        frontStr = bin.substring(0, index),    //前几位的字符串
+		        len = frontStr.length;                 //前几位字符串的长度
+		    if (len < 4) {
+		        //确定第一部分字符串要增加的0的个数
+		        var add0Length = 4 - len;
+		        for (var i = 0; i < add0Length; i++) {
+		            frontStr = 0 + frontStr;
+		        }
+		    }
+		    //填充后的总字符串
+		    var totalStr = "1110" + frontStr + "10" + midStr + "10" + lastStr;
+		    //先转化为10进制再转为16进制
+		    return parseInt(totalStr, 2).toString(16);
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "hn2-server",
+  "version": "1.0.5",
+  "description": "",
+  "main": "index.js",
+  "devDependencies":{
+    "mime":"^1.3.4"
+  },
+  "bin":{"hn2-server":"./app.js"},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
