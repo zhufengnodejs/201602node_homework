@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>登陆</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        .ml15{
+            margin-left: 15px;
+        }
+        .mt40{
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row col-md-10 col-md-offset-1">
+        <div class="searchuser mt40">
+            <fieldset>
+                <legend>查询区域</legend>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="InputName2">姓名</label>
+                        <input type="text" class="form-control " id="InputName2" placeholder="姓名">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="Inputpasword">密码(输入年龄)</label>
+                        <input type="password" class="form-control " id="Inputpasword" placeholder="密码">
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" id="ser" class="btn btn-default ml15">查询</button>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<script>
+    var ser = $("#ser");
+    //    var user={};
+    //    查询方法
+    ser.on('click',function(){
+        var someone=$('.searchuser input[type=text]').val()+'';
+        var password=$('.searchuser input[type=password]').val()+'';
+        console.log(someone+"--"+password);
+        $.ajax({
+            url:'/user/'+someone+'/'+password,
+            type:'get',
+            //  data:someone,   //传递json字符串
+            dataType:'json',  //设置json，否则以text查询，得到的data需要通过JSON.Parse转为对象。
+            success:function(data){
+                console.info("查询的："+data);
+                if( data.message=="succ"){
+                    window.location.href="/welcome.html";
+                }else{
+                    alert("没有数据");
+                }
+//                var html=[];
+//                html.push('<tr><th>'+data.id+'</th>');
+//                html.push('<td>'+data.username+'</td>');
+//                html.push('<td>'+data.age+'</td>');
+//                html.push('<td></td></tr>');
+//                $('#searchtable tbody').append(html.toString());
+            },
+            error:function(data){
+                alert("查询失败");
+            }
+        })
+    });
+</script>
+</body>
+</html>
