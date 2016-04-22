@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>zhangyan-user</title>
+	<link rel="stylesheet" href="1.css">
+</head>
+<body>
+<div class="box" id="large-header">
+	<h1 style="font-size:150px;position: absolute;top:100px;left:50px;color:green;">e<i style="background:#abdded;color:red;">x</i>press</h1>
+	<div class="form" style="float: left;width:100%;">
+		<button type="submit" class="botton" id="addusers">注册</button>
+		<button type="submit" class="botton" id="search">查询</button>
+		<button type="submit" class="botton" id="delete">删除</button>
+		<button type="submit" class="botton" id="show">显示</button>
+		<div class="box1">
+			<input type="text" class="input1" placeholder="name" name="nameuser">
+			<input type="text" class="input2" placeholder="age" name="age">
+		</div>
+		<div class="table_box" style="margin-top:45px;margin-left: 200px;">
+			<h1 class="logo list">Second methods</h1>
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<th>Age</th>
+				</tr>
+				<!--<tr><td>aaa</td><td>18</td><td></td></tr>-->
+			</table>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="./jquery.min.js" type="text/javascript"></script>
+<script>
+	$("#addusers").on("click",function(){
+		var nameUser = $("input[name='nameuser']").val();
+		var age = $("input[name='age']").val();
+		if( nameUser == "" ){
+			alert("请填写用户名");
+			return false;
+		}else if( age == "" ){
+			alert("请填写年龄");
+			return false;
+		}
+		var users = {
+			name:nameUser,
+			age:age
+		};
+		$.ajax({
+			url:"/zhangyan",
+			type:"post",
+			data:JSON.stringify(users),
+			dataType:"json",
+			success:function(data){
+				var str = '<tr><td class="username">'+ nameUser +'</td><td class="age">'+ age +'</td></tr>';
+				$('.table').append(str);
+			},
+			error:function(xhr,status,error){
+				console.error('添加失败' + error);
+			},
+			headers:{
+				"Content-Type":"application/json"
+			}
+		});
+	});
+	//查询字符串
+	$("#show").on("click",function(){
+		$.ajax({
+			url:"/zhangyan",
+			type:"get",
+			dataType:"json",
+			success:function(data){
+				var str = '';
+				$.each(data.value,function(index,item){
+					str += '<tr><td class="username">'+ item.name +'</td><td class="age">'+ item.age +'</td></tr>';
+				});
+
+				$(".table tbody tr td").parent().remove();
+				$('.table').append(str);
+			},
+			error:function(xhr,status,error){
+				console.error('查询失败' + error);
+			},
+			headers:{
+				"Content-Type":"application/json"
+			}
+		});
+	});
+
+	$("#delete").on("click",function(){
+		var nameUser = $("input[name='nameuser']").val();
+		var age = $("input[name='age']").val();
+		var users = {
+			name:nameUser,
+			age:age
+		};
+		$.ajax({
+			url:"zhangyan",
+			type:"delete",
+			data:JSON.stringify(users),
+			dataType:"json",
+			success:function(data){
+				var str = '';
+				$.each(data.value,function(index,item){console.log(data.value);
+					str = '<tr><td class="username">'+ item.name +'</td><td class="age">'+ item.age +'</td></tr>';
+				});
+				$('.table').append(str);
+			},
+			error:function(xhr,status,error){
+				console.error('删除失败' + error);
+			},
+			headers:{
+				"Content-Type":"application/json"
+			}
+		});
+	});
+
+
+</script>
