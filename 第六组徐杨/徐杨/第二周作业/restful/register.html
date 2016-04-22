@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>注册</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        .ml15{
+            margin-left: 15px;
+        }
+        .mt40{
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row col-md-10 col-md-offset-1">
+        <div class="adduer mt40">
+            <fieldset>
+                <legend>注册</legend>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="InputName1">姓名</label>
+                        <input type="text" name="name" class="form-control " id="InputName1" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="InputAge">年龄</label>
+                        <input type="number" name="age" class="form-control" id="InputAge" placeholder="年龄">
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" id="add" class="btn btn-default" style="margin-left: 15px;">注册</button>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+<script>
+    var add = $("#add");
+    var user={};
+    //    添加方法
+    add.on('click',function(){
+        var someone=getinput();
+        $.ajax({
+            url:'/user/reg',
+            type:'post',
+            data:JSON.stringify(someone),   //传递json字符串
+            dataType:'json',
+            success:function(data){
+                console.info("添加的："+data);
+                if(data.message == "succ"){
+                    window.location.href="/login.html";
+                }
+            },
+            error:function(){
+                alert("添加失败");
+            }
+        })
+    });
+    function getinput(){
+        var name = $('.adduer input[name=name]').val();
+        var age = $('.adduer input[name=age]').val();
+        return {username:name,age:age};
+    }
+</script>
+</body>
+</html>
