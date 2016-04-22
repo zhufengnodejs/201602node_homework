@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>node+express实现restful</title>
+    <link href="//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet">
+</head>
+<body>
+<form class="ui form" style="width:40%;" action="" method="">
+    <div class="field">
+        <label>新员工姓名</label>
+        <input type="text" name="name" placeholder="姓名">
+    </div>
+    <div class="field">
+        <label>所属部门</label>
+        <input type="text" name="apartment" placeholder="所属部门">
+    </div>
+    <div class="field">
+        <label>联系电话</label>
+        <input type="text" name="phone" placeholder="联系电话">
+    </div>
+    <input type="hidden" name="updateId">
+    <input type="hidden" name="id">
+
+    <button class="ui button add" type="submit">添加新用户</button>
+</form>
+<table class="ui black table">
+    <thead>
+    <tr>
+        <th>姓名</th>
+        <th>所属部门</th>
+        <th>联系电话</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!--<tr>-->
+    <!--<td>张三</td>-->
+    <!--<td>13423423456</td>-->
+    <!--<td>技术部</td>-->
+    <!--<td>-->
+    <!--<button class="positive ui button">编辑</button>-->
+    <!--<button class="negative ui button">移除</button>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+    <!--<td>李四</td>-->
+    <!--<td>13423423356</td>-->
+    <!--<td>产品部</td>-->
+    <!--<td>-->
+    <!--<button class="positive ui button">编辑</button>-->
+    <!--<button class="negative ui button">移除</button>-->
+    <!--</td>-->
+    <!--</tr>-->
+    </tbody>
+</table>
+
+</body>
+</html>
+<script src="//cdn.bootcss.com/jquery/3.0.0-beta1/jquery.min.js"></script>
+<script>
+    $(function () {
+        //做空表单提交验证
+        function validateBlank() {
+            var $pNum = $('input[type="text"]');
+            var str = $.trim($pNum.val());
+            if (str == "") {
+                return false;
+            }
+        }
+        //页面第一次加载get数据
+        $.ajax({
+            url: '/users',
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status == "success") {
+                    var str = '';
+                    $.each(data.value, function (index, item) {
+                        str += '<tr><td class="name">' + item.name + '</td><td class="apartment">' + item.apartment + '</td><td class="phone">' + item.phone + '</td>' +
+                                '<td>' +
+                                '<button class="positive ui button edit" id_attr="' + item.id + '">编辑</button>' +
+                                '<button class="negative ui button remove" id_attr="' + item.id + '">移除</button>' +
+                                '</td></tr>';
+                    })
+
+                    $('tbody').append(str);
+                }
+            },
+            error: function (xhr, status, err) {
+                console.error(err);
+            }
+        });
+
+        //增
+        var formBtn = $('.form button');
+            $('.form').submit(function (e) {
+                if(validateBlank()== false){
+                    return;
+                }
+                if (formBtn.hasClass('add')) {
+                    $.ajax({
+                        url: '/users',
+                        type: "POST",
+                        data: $('.form').serialize(),
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                var str = '<tr><td class="name">' + data.value.name + '</td><td class="apartment">' + data.value.apartment + '</td><td class="phone">' + data.value.phone + '</td>' +
+                                        '<td>' +
+                                        '<button class="positive ui button edit" id_attr="' + data.value.id + '">编辑</button>' +
+                                        '<button class="negative ui button remove" id_attr="' + data.value.id + '">移除</button>' +
+                                        '</td></tr>';
+                                $('tbody').append(str);
+                                window.location.reload();
+                            }
+                        },
+                        error: function (xhr, status, err) {
+                            console.error(err);
+                        }
+                    });
+                }
+            });
+
+        //删
+        $('body').on('click', '.remove', function () {
+            var me = $(this);
+            var id = $(this).attr('id_attr');
+            $.ajax({
+                url: '/users',
+                type: 'delete',
+                data: '{"deleteId": id}',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        me.parents('tr').remove();
+                    }
+                },
+                error: function (xhr, status, err) {
+                    console.error(err);
+                }
+            });
+        });
+
+
+        //改
+        $('body').on('click', '.edit', function () {
+            var updateId = $(this).attr('id_attr');
+
+            var formBtn = $('.form button'),
+                    nameInput = $('input[name="name"]'),
+                    apartmentInput = $('input[name="apartment"]'),
+                    phoneInput = $('input[name="phone"]'),
+                    hiddenInput = $('input[name="updateId"]'),
+
+
+                    nameList = $(this).parents('tr').find('.name'),
+                    apartmentList = $(this).parents('tr').find('.apartment'),
+                    phoneList = $(this).parents('tr').find('.phone');
+
+
+            formBtn.removeClass('add').addClass('update').html('提交修改');
+            nameInput.val(nameList.text());
+            apartmentInput.val(apartmentList.text());
+            phoneInput.val(phoneList.text());
+            hiddenInput.val(updateId);
+
+        });
+
+        $('.form').submit(function (e) {
+            if (formBtn.hasClass('update')) {
+                $.ajax({
+                    url: '/users',
+                    type: "PUT",
+                    data: $('.form').serialize(),
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            var str = '<tr><td class="name">' + data.value.name + '</td><td class="apartment">' + data.value.apartment + '</td><td class="phone">' + data.value.phone + '</td>' +
+                                    '<td>' +
+                                    '<button class="positive ui button edit" id_attr="' + data.value.id + '">编辑</button>' +
+                                    '<button class="negative ui button remove" id_attr="' + data.value.id + '">移除</button>' +
+                                    '</td></tr>';
+                            $('tbody').append(str);
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        console.error(err);
+                    }
+                });
+            }
+        });
+    });
+</script>
