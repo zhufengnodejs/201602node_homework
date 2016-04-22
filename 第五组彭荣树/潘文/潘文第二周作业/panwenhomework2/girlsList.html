@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>girls</title>
+    <style>
+        body,li,ul,span,input,p{padding:0 ;margin:0}
+        li{list-style: none;}
+        ul{width:400px;
+            border: 1px solid #ccc;border-bottom:none;}
+        li{height:30px;line-height:30px;font-size:14px;padding:0 10px;border-bottom: 1px solid #ccc;}
+        li span{
+            display: block;margin-right: 10px;float: left}
+        li p{display: block;float: left;width:200px}
+        input[type="text"]{width:300px;height:30px;line-height:30px;font-size:14px;margin-bottom: 30px;}
+        input[type="button"]{width:60px;height:30px;}
+        .delate{float:left;}
+    </style>
+</head>
+<body>
+<input type="text" id="addTxt" /><input type="button" value="增加" id = "add"/>
+<ul class="list">
+
+</ul>
+
+<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+<script>
+    $(function(){
+        function loadList(){
+            $.ajax({
+                type: "GET",
+                url: "/girls",
+                dataType: "json",
+                success: function(data){
+                    //console.log(data);
+                    var str = "";
+                    for(var key in data){
+                        str+= "<li><span>" +data[key].id+ "</span><p>" + data[key].name + "</p><input type='button' value='删除' class='delate'></li>";
+                    }
+                    $(".list").append(str);
+                }
+            });
+        }
+        loadList();
+        $("#add").on("click",function(){
+            $.ajax({
+                type: "POST",
+                url: "/girls",
+                dataType: "json",
+                data:{name:$("#addTxt").val()},
+                success: function(data){
+                    //console.log(data)
+                    var str2 = "<li><span>" +data.id+ "</span><p>" + data.name + "</p><input type='button' value='删除' class='delate'></li>";
+                    $(".list").append(str2);
+                }
+            });
+        })
+        $(document).on("click",".delate",function(){
+            $.ajax({
+                type: "DELETE",
+                url: "/girls/"+$(this).siblings("span").html(),
+                dataType: "json",
+                success: function(data){
+                    //console.log(data);
+                    $(".list li").remove();
+                    loadList();
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>
