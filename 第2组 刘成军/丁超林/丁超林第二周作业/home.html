@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户数据处理</title>
+</head>
+<body>
+    <span colspan="6">姓名<input id="name" name="username" type="text" size="20%"></span><br>
+    <span colspan="6">年龄<input id="age" name="age" type="text" size="20%"> </span><br>
+    <span colspan="6">编号<input id="ID" name="ID" type="text" size="20%"> </span><br>
+
+
+
+    <input type="button" onclick="getUsersList()" value="查看用户列表">
+    <input type="button" onclick="getUsers()" value="查看用户">
+    <!--
+    <form id="formadd" action="/users" enctype="application/x-www-form-urlencoded">
+    <button onclick="addUser()" >增加</button>
+    </form>-->
+    <input type="button" name="addbutton" onclick="addUser()" value="增加">
+    <input type="button" onclick="modifyUser()" value="修改">
+    <input type="button" onclick="reWriteUser()" value="重新录入">
+    <input type="button" onclick="deleteUser()" value="删除"><br><br>
+
+    <table id="tableid" border="1" cellpadding="0" cellspacing="0" width="50%" >
+        <thead>
+        <tr>
+            <td>姓名</td>
+            <td>年龄</td>
+            <td>编号</td>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+
+    </table>
+
+
+</body>
+<script>
+
+    function getUsersList(){
+        //var f = document.getElementsByTagName("form")[0];
+        //f.action=f.action+"id="+document.getElementById("age").value;
+        //alert(f.action);
+
+        var xhr = new XMLHttpRequest();
+        //xhr.setRequestHeader('If-Modified-Since', 0);
+
+        var url = '/users?' + Math.random()*10000;
+       // xhr.open('GET', '/users', true );
+        xhr.open('GET', url, true );
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = function(){
+
+            if( xhr.readyState == 4 && /2\d{2}/.test( xhr.status) ){
+                var users = JSON.parse( xhr.response );
+                var tBody = document.getElementById("tbody");
+                tBody.innerHTML = '';
+                for( var i = 0,len = users.length; i < len ; i ++ ){
+                    var tr = document.createElement( 'tr' );
+                    var tdName = document.createElement('td');
+                    var tdAge = document.createElement('td');
+                    var tdID = document.createElement('td');
+                    tdName.innerHTML = users[i].name;
+                    tdAge.innerHTML = users[i].age;
+                    tdID.innerHTML = users[i].id;
+                    tr.appendChild( tdName );
+                    tr.appendChild( tdAge );
+                    tr.appendChild( tdID );
+                    tBody.appendChild( tr );
+                }
+
+            }
+        }
+        xhr.send();
+    }
+    function reWriteUser(){
+        var url = '/users/' + document.getElementById("ID").value;
+        alert( url );
+        var xhr = new XMLHttpRequest();
+        var username = document.getElementById("name").value;
+        var age = document.getElementById("age").value;
+        var user = {
+            name:username,
+            age:age,
+            id:0
+        };
+        //xhr.responseType = 'json';
+        //xhr.setRequestHeader("Content-Type","application/json");
+        xhr.open('PATCH', url, true );
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function(){
+
+            if( xhr.readyState == 4 && /2\d{2}/.test( xhr.status) ){
+                var user = JSON.parse( xhr.response );
+                var tBody = document.getElementById("tbody");
+                tBody.innerHTML = '';
+
+                var tr = document.createElement( 'tr' );
+                var tdName = document.createElement('td');
+                var tdAge = document.createElement('td');
+                var tdID = document.createElement('td');
+                tdName.innerHTML = user.name;
+                tdAge.innerHTML = user.age;
+                tdID.innerHTML = user.id;
+                tr.appendChild( tdName );
+                tr.appendChild( tdAge );
+                tr.appendChild( tdID );
+                tBody.appendChild( tr );
+
+
+            }
+        }
+        //alert( JSON.stringify( user) );
+        xhr.send( JSON.stringify( user) );
+    }
+
+    function modifyUser(){
+        var url = '/users/' + document.getElementById("ID").value;
+        alert( url );
+        var xhr = new XMLHttpRequest();
+        var username = document.getElementById("name").value;
+        var age = document.getElementById("age").value;
+        var user = {
+            name:username,
+            age:age,
+            id:0
+        };
+        xhr.open('PUT', url, true );
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function(){
+
+            if( xhr.readyState == 4 && /2\d{2}/.test( xhr.status) ){
+                var user = JSON.parse( xhr.response );
+                var tBody = document.getElementById("tbody");
+                tBody.innerHTML = '';
+
+                var tr = document.createElement( 'tr' );
+                var tdName = document.createElement('td');
+                var tdAge = document.createElement('td');
+                var tdID = document.createElement('td');
+                tdName.innerHTML = user.name;
+                tdAge.innerHTML = user.age;
+                tdID.innerHTML = user.id;
+                tr.appendChild( tdName );
+                tr.appendChild( tdAge );
+                tr.appendChild( tdID );
+                tBody.appendChild( tr );
+
+
+            }
+        }
+        //alert( JSON.stringify( user) );
+        xhr.send( JSON.stringify( user) );
+    }
+    function getUsers(){
+
+        var url = '/users/' + document.getElementById("ID").value;
+        //alert( url );
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', url, true );
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function(){
+
+            if( xhr.readyState == 4 && /2\d{2}/.test( xhr.status) ){
+                var user = JSON.parse( xhr.response );
+                var tBody = document.getElementById("tbody");
+                tBody.innerHTML = '';
+
+                var tr = document.createElement( 'tr' );
+                var tdName = document.createElement('td');
+                var tdAge = document.createElement('td');
+                var tdID = document.createElement('td');
+                tdName.innerHTML = user.name;
+                tdAge.innerHTML = user.age;
+                tdID.innerHTML = user.id;
+                tr.appendChild( tdName );
+                tr.appendChild( tdAge );
+                tr.appendChild( tdID );
+                tBody.appendChild( tr );
+            }
+        }
+        xhr.send( );
+    }
+
+    function addUser(){
+        var username = document.getElementById("name").value;
+        var age = document.getElementById("age").value;
+        var user = {
+            name:username,
+            age:age,
+            id:0
+        };
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/users', true );
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json"); //   x-www-form-urlencoded
+        xhr.onreadystatechange = function(){
+            if( xhr.readyState == 4 && /2\d{2}/.test( xhr.status) ){
+                var user = JSON.parse( xhr.responseText );
+                var tBody = document.getElementById("tbody");
+                tBody.innerHTML = '';
+                var tr = document.createElement( 'tr' );
+                var tdName = document.createElement('td');
+                var tdAge = document.createElement('td');
+                var tdID = document.createElement('td');
+                tdName.innerHTML = user.name;
+                tdAge.innerHTML = user.age;
+                tdID.innerHTML = user.id;
+                tr.appendChild( tdName );
+                tr.appendChild( tdAge );
+                tr.appendChild( tdID );
+                tBody.appendChild( tr );
+            }
+        }
+        xhr.send( JSON.stringify( user ) );
+    }
+
+
+    function deleteUser(){
+        var url = '/users/' + document.getElementById("ID").value;
+        //alert( url );
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('DELETE', url, true );
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function(){
+
+            if( xhr.readyState == 4 && /2\d{2}/.test( xhr.status) ){
+                var user = JSON.parse( xhr.response );
+                var tBody = document.getElementById("tbody");
+                tBody.innerHTML = '';
+            }
+        }
+        xhr.send( );
+    }
+</script>
+</html>

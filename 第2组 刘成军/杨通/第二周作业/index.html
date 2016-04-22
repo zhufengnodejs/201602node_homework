@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="main">
+    <form action="" class="form">
+        姓名:<input type="text" class="username" name="username">
+        年龄:<input type="text" class="age" name="age">
+        <button type="button" id="save" class="">保存</button>
+        <button type="button" id="cancel" class="">取消</button>
+        <button type="button" id="register" class="">注册</button>
+    </form>
+    <table id="restful">
+        <tbody>
+        <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>年龄</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    var reg = document.querySelector('#register'),
+            username = document.querySelector('#username'),
+            age = document.querySelector('#age'),
+            save = document.querySelector('#save'),
+            cancel = document.querySelector('#cancel'),
+            restful=document.querySelector('#restful');
+    //获取用户拼接字符串
+    function userGet(result) {
+        var str = ''
+        str += '<tr><th>ID</th><th>用户名</th><th>年龄</th><th class="text-center">操作</th></tr>';
+        for (var i = 0; i < result.length; i++) {
+            str += '<tr><th>' + result[i].id + '</th>'
+            str += '<th>' + result[i].name + '</th>'
+            str += '<th>' + result[i].age + '</th>'
+            str += '</tr>'
+        }
+        return str
+    }
+    function inserUser(url, type) {
+        var nameVal = username.value, ageVal = age.value;
+        if (nameVal && ageVal) {
+            var obj = {};
+            obj.name = nameVal,
+                obj.age = ageVal
+            var xhr = new XMLHttpRequest();
+            xhr.open(type, url, true);
+            xhr.responseType = 'json';
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var res = xhr.response;
+                    console.log(res);
+                    user();
+                }
+            }
+            xhr.send(JSON.stringify(obj))
+            obj = null;
+            username.value = '';
+            age.value = ''
+        }
+    }
+    //查看所有用户
+    function user() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/users', true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var res = xhr.response;
+                var result = userGet(res)
+                restful.innerHTML = result;
+            }
+        }
+        xhr.send()
+    }
+    user();
+    //点击注册
+    reg.onclick = function () {
+        inserUser('/users', 'POST')
+    }
+    //获取一个用户编辑
+    restful.addEventListener('click', function (e) {
+        var target = e.target;
+        if (target.getAttribute('id') == 'edit') {
+            reg.className += ' hide';
+            save.className = 'btn btn btn-primary';
+            cancel.className = 'btn btn btn-default';
+            var id = target.getAttribute('attr');
+            var parent = target.parentNode;
+            save.setAttribute('attr', id);
+        }
+    })
+    save.onclick = function () {
+        var id = this.getAttribute('attr');
+        console.log(id);
+        if (username.value && age.value) {
+            inserUser('/users/' + id, 'PATCH');
+            reg.className = 'btn btn btn-info';
+            save.className = 'btn btn btn-primary hide';
+            cancel.className = 'btn btn btn-default hide';
+        }
+    }
+    cancel.onclick = function () {
+        username.value = '';
+        age.value = '';
+        reg.className = 'btn btn btn-info';
+        save.className = 'btn btn btn-primary hide';
+        cancel.className = 'btn btn btn-default hide';
+    }
+    restful.addEventListener('click', function (e) {
+        var target = e.target;
+        if (target.getAttribute('id') == 'delete') {
+            var id = target.getAttribute('attr');
+            console.log(id)
+            var xhr = new XMLHttpRequest();
+            xhr.open('DELETE', '/users/' + id, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var res = xhr.response;
+                    console.log(res)
+                    user();
+                }
+            }
+            xhr.send()
+        }
+    })
+
+</script>
+</body>
+</html>
