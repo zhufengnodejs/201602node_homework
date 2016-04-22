@@ -62,5 +62,5 @@ app.put('/users/:id', function (req,res) {
     fs.writeFile(db,JSON.stringify(users),function(){
         res.send(newMovie);
     })
-})
+});
 app.listen(9090);
