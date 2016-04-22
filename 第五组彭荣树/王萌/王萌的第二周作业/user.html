@@ -47,8 +47,8 @@
                 $.each(data.value, function(index, item){
                     str += '<tr><td class="username">'+ item.username +'</td><td class="age">'+ item.age +'</td>' +
                             '<td class="col-sm-4">' +
-                            '<button type="button" class="btn btn-info edit" id_attr="'+item.id+'">Edit</button>' +
-                            '<button type="button" class="btn btn-warning col-sm-offset-1 remove" id_attr="'+item.id+'">Remove</button>' +
+                            '<button type="button" class="btn btn-info edit" id_attr="'+item.id+'">编辑</button>' +
+                            '<button type="button" class="btn btn-warning col-sm-offset-1 remove" id_attr="'+item.id+'">删除</button>' +
                             '</td></tr>';
                 })
                 $('.table').append(str);
@@ -96,8 +96,8 @@
                         console.log('add success', data.value);
                         var str = '<tr><td class="username">'+ data.value.username +'</td><td class="age">'+ data.value.age +'</td>' +
                                 '<td class="col-sm-4">' +
-                                '<button type="button" class="btn btn-info edit" id_attr="'+data.value.id+'">Edit</button>' +
-                                '<button type="button" class="btn btn-warning col-sm-offset-1 remove" >Remove</button>' +
+                                '<button type="button" class="btn btn-info edit" id_attr="'+data.value.id+'">编辑</button>' +
+                                '<button type="button" class="btn btn-warning col-sm-offset-1 remove" >删除</button>' +
                                 '</td></tr>';
 
                         $('.table').append(str);
@@ -148,7 +148,7 @@
                     usrNameTd = $(this).parent().parent().find('.username'),
                     ageTd = $(this).parent().parent().find('.age');
 
-            formTitle.text('Edit user');
+            formTitle.text('重新编辑');
             formBtn.remove();
             formDiv.append(submitEditBtn);
             usrNameInput.val(usrNameTd.text());
