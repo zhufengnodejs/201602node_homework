@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的电影</title>
+    <link href="/style.css" rel="stylesheet">
+    <script src="/jquery.min.js"></script>
+    <script src="/index.js"></script>
+</head>
+<body>
+<div id="query">
+    <dl>
+        <dt><input type="button" id="allMovie" value="我的收藏" class="btn"></dt>
+    </dl>
+    <dl>
+        <dd><input id="actor" class="txt" type="text" size="15" placeholder="演员"></dd>
+        <dd><input id="movie" class="txt" type="text" size="15" placeholder="电影"></dd>
+        <dt><input type="button" id="addMovie" value="新增收藏" class="btn"></dt>
+    </dl>
+    <dl>
+        <dd><input id="movieName" class="txt" type="text" size="15" placeholder="请输入电影名称"></dd>
+        <dt><input type="button" id="movieNameBtn" value="按电影查询" class="btn"></dt>
+    </dl>
+    <dl>
+        <dd><input id="editId" class="txt" type="text" size="15" placeholder="ID"></dd>
+        <dd><input id="editActor" class="txt" type="text" size="15" placeholder="演员"></dd>
+        <dd><input id="editMovie" class="txt" type="text" size="15" placeholder="电影"></dd>
+        <dt><input type="button" id="submitMovie" value="修改" class="btn"></dt>
+    </dl>
+</div>
+<div id="myMovies">
+    <h2>我的豆瓣电影收藏</h2>
+
+    <div id="movieList">
+
+    </div>
+</div>
+</body>
+</html>
