@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>管理员操作页</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        .ml15{
+            margin-left: 15px;
+        }
+        .mt40{
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row col-md-10 col-md-offset-1">
+        <div class="adduer mt40">
+            <fieldset>
+                <legend>添加区域</legend>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="InputName1">姓名</label>
+                        <input type="text" name="name" class="form-control " id="InputName1" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="InputAge">年龄</label>
+                        <input type="number" name="age" class="form-control" id="InputAge" placeholder="年龄">
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" id="add" class="btn btn-default" style="margin-left: 15px;">添加</button>
+                </div>
+            </fieldset>
+        </div>
+        <div class="searchuser mt40">
+            <fieldset>
+                <legend>查询区域</legend>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="InputName2">姓名</label>
+                        <input type="text" class="form-control " id="InputName2" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" id="ser" class="btn btn-default ml15">查询</button>
+                </div>
+            </fieldset>
+        </div>
+
+        <table class="table" id="addtable">
+            <thead>
+            <tr>
+                <th>添加表</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <table class="table" id="searchtable">
+            <thead>
+            <tr>
+                <th>查询表</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    var add = $("#add");
+    var ser = $("#ser");
+    var user={};
+    //    添加方法
+    add.on('click',function(){
+        var someone=getinput();
+        $.ajax({
+            url:'/user/new',
+            type:'post',
+            data:JSON.stringify(someone),   //传递json字符串
+            dataType:'json',
+            success:function(data){
+                console.info("添加的："+data);
+                var html=[];
+                html.push('<tr><th>'+data.id+'</th>');
+                html.push('<td>'+data.username+'</td>');
+                html.push('<td>'+data.age+'</td>');
+                html.push('<td><button type="button" class="btn btn-danger btn-xs">删除</button></td></tr>');
+                $('#addtable tbody').append(html.toString());
+                addDeleteEvent();
+            },
+            error:function(){
+                alert("添加失败");
+            }
+        })
+    });
+    //    查询方法
+    ser.on('click',function(){
+        var someone=$('.searchuser input[type=text]').val()+'';
+        //    console.log(someone);
+        $.ajax({
+            url:'/user/'+someone+"/none",
+            type:'get',
+            //  data:someone,   //传递json字符串
+            dataType:'json',  //设置json，否则以text查询，得到的data需要通过JSON.Parse转为对象。
+            success:function(data){
+                console.info("查询的："+data);
+                var html=[];
+                html.push('<tr><th>'+data.id+'</th>');
+                html.push('<td>'+data.username+'</td>');
+                html.push('<td>'+data.age+'</td>');
+                html.push('<td></td></tr>');
+                $('#searchtable tbody').append(html.toString());
+            },
+            error:function(data){
+                alert("查询失败");
+            }
+        })
+    });
+    // 删除功能
+    function addDeleteEvent(){
+        $('.btn-xs').on('click',function(){
+            var _this = $(this);
+            var _thistr=_this.parent().parent();
+            var id=_thistr.find('th').text();
+            $.ajax({
+                url:'/user/'+id,
+                type:'delete',
+                //  data:someone,   //传递json字符串
+                dataType:'text',  //设置json，否则以text查询，得到的data需要通过JSON.Parse转为对象。
+                success:function(data){
+                    console.info("删除的返回状态值："+data);
+                    if(data == 'success'){
+                        _thistr.remove();
+                    }
+                },
+                error:function(data){
+                    alert("查询失败");
+                }
+            })
+        })
+    }
+    function getinput(){
+        var name = $('.adduer input[name=name]').val();
+        var age = $('.adduer input[name=age]').val();
+        return {username:name,age:age};
+    }
+</script>
+</body>
+</html>

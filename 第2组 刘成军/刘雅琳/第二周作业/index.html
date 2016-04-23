@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body,input{font-size: 14px;}
+        form{margin: 150px auto 0;width: 500px;}
+        .user,table{width: 300px;margin: 0 auto;}
+        .user span{display: inline-block;width: 80px;text-align: left;}
+        .user input{width: 200px;margin-bottom: 10px;outline: none;height: 30px;line-height: 30px;border: 1px solid #ccc;text-indent: 1em;}
+        .operation{margin: 20px auto;}
+        .operation input{background: #ccc;color: #373838;width: 90px;height: 30px;line-height: 30px;text-align: center;border-radius: 3px;outline: none;border: none;cursor: pointer;}
+        table{text-align: center;}
+        table thead{background: #F3F2D1;}
+        tr{height: 30px;}
+        #id{display: block;width: 200px;height: 30px;line-height: 30px;margin: 0 auto 10px;outline: none;border: 1px solid #ccc;text-align: center;}
+    </style>
+</head>
+<body>
+<form action="">
+    <div class="user">
+        <span>姓名：</span><input type="text" name="username" id="username">
+        <span>年龄：</span><input type="text" name="age" id="age">
+        <span>分数：</span><input type="text" name="grade" id="grade">
+    </div>
+    <div class="operation">
+        <input type="button" id="showAll" value="显示全部" onclick="getAll()">
+        <input type="button" id="add" value="增加信息" onclick="addUser()">
+        <input type="button" id="search" value="查找信息" onclick="getUser()">
+        <input type="button" id="edit" value="编辑信息" onclick="editUser()">
+        <input type="button" id="delete" value="删除信息" onclick="deleteUser()">
+    </div>
+    <input type="text" id="id" name="id" placeholder="请输入ID">
+    <table id="table" border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <td>姓名</td>
+                <td>年龄</td>
+                <td>分数</td>
+                <td>ID</td>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</form>
+</body>
+</html>
+<script>
+    var xhr = new XMLHttpRequest();
+    var tbody = document.querySelector('tbody');
+    function getValue(a) {
+        return document.querySelector(a).value;
+    }
+    function cElement(tab) {
+        return document.createElement(tab);
+    }
+    function getAll() {
+        xhr.open('GET','/server',true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var user = xhr.response;
+                tbody.innerHTML = '';
+                for (var i = 0;i<user.length;i++) {
+                    var tr = cElement('tr');
+                    for(var j in user[i]) {
+                        if (user[i].hasOwnProperty(j)){
+                            var td = cElement('td');
+                            td.innerHTML = user[i][j];
+                            tr.appendChild(td);
+                         }
+                    }
+                    tbody.appendChild(tr);
+                }
+            }
+        }
+        xhr.send();
+    }
+
+    function addUser() {
+        var user = {
+            name : getValue('#username'),
+            age : getValue('#age'),
+            grade : getValue('#grade')
+        }
+        xhr.open('POST','/server',true);
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var user = xhr.response;
+                tbody.innerHTML = '';
+                for (var i = 0;i<user.length;i++) {
+                    var tr = cElement('tr');
+                    for(var j in user[i]) {
+                        if (user[i].hasOwnProperty(j)){
+                            var td = cElement('td');
+                            td.innerHTML = user[i][j];
+                            tr.appendChild(td);
+                        }
+                    }
+                    tbody.appendChild(tr);
+                }
+            }
+        }
+        xhr.send(JSON.stringify(user));
+    }
+
+    function getUser() {
+        var idNum = '/server/' + getValue('#id');
+        xhr.open('GET',idNum,true);
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var user = xhr.response;
+                tbody.innerHTML = '';
+                var tr = cElement('tr');
+                for(var j in user) {
+                    if (user.hasOwnProperty(j)){
+                        var td = cElement('td');
+                        td.innerHTML = user[j];
+                        tr.appendChild(td);
+                    }
+                }
+                tbody.appendChild(tr);
+            }
+        }
+        xhr.send();
+    }
+
+    function editUser() {
+        var user = {
+            name : getValue('#username'),
+            age : getValue('#age'),
+            grade : getValue('#grade')
+        }
+        var url = '/server/' + getValue('#id');
+        xhr.open('put',url,true);
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var user = xhr.response;
+                tbody.innerHTML = '';
+                var tr = cElement('tr');
+                for(var j in user) {
+                    if (user.hasOwnProperty(j)){
+                        var td = cElement('td');
+                        td.innerHTML = user[j];
+                        tr.appendChild(td);
+                    }
+                }
+                tbody.appendChild(tr);
+            }
+        }
+        xhr.send(JSON.stringify(user));
+    }
+
+    function deleteUser() {
+        var url = '/server/' + getValue('#id');
+        xhr.open('DELETE',url,true);
+        xhr.responseType = 'json';
+        xhr.setRequestHeader("Content-Type","application/json");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var user = xhr.response;
+                tbody.innerHTML = '';
+                var tr = cElement('tr');
+                for(var j in user) {
+                    if (user.hasOwnProperty(j)){
+                        var td = cElement('td');
+                        td.innerHTML = user[j];
+                        tr.appendChild(td);
+                    }
+                }
+                tbody.appendChild(tr);
+            }
+        }
+        xhr.send();
+    }
+</script>
