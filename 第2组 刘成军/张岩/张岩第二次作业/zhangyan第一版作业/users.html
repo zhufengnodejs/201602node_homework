@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>zhangyan-user</title>
+	<!--效果部分-->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="css/demo.css" />
+	<link rel="stylesheet" type="text/css" href="css/component.css" />
+	<!--效果部分-->
+	<link rel="stylesheet" href="1.css">
+</head>
+<body>
+<canvas id="demo-canvas" style="position: absolute;top: 0px;left: 0px;z-index: -1;"></canvas>
+<div class="box" id="large-header">
+
+	<div class="form">
+		<h1 class="logo" id="change_title">Add user</h1>
+		<span class="name_input ma1">Username</span>
+		<input type="text" class="input1" name="username" placeholder="username">
+		<span class="name_input ma2">Age</span>
+		<input type="text" class="input2" name="age" placeholder="age">
+		<button type="submit" id="adduser" class="botton">提交</button>
+	</div>
+	<div class="table_box">
+		<h1 class="logo list">List all users</h1>
+		<table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>操作</th>
+            </tr>
+ <!-- <tr><td>aaa</td><td>18</td><td><button type="button" class="edit btn">编辑</button><button type="button" class="remove btn">删除</button></td></tr>-->
+        </table>
+	</div>
+</div>
+</body>
+</html>
+<script src="./jquery.min.js" type="text/javascript"></script>
+
+<script>
+	//添加用户
+	var adduser = $("#adduser");
+	adduser.on("click", function () {
+		var username = $("input[name='username']").val();
+		var age = $("input[name='age']").val();
+		$(".input1,.input2").val("");
+		var user = {
+			username: username,
+			age:age
+		};
+		$.ajax({
+			url:"/users",
+			type:"post",
+			data:JSON.stringify(user),
+			dataType:"json",
+			success:function(data){
+				if( data.status == "success" ){
+					var str = '<tr><td class="username">'+ username +'</td><td class="age">'+ age +'</td><td>\
+							<button type="button" class="edit btn">编辑</button>\
+							<button type="button" class="remove btn">删除</button></td></tr>';
+					$('.table').append(str);
+					history.go(0);
+				}
+			},
+			error:function(xhr,status,error){
+				console.error('添加失败' + err);
+			}
+		});
+	})
+
+	//查询用户
+	$.ajax({
+		url:"/users",
+		type:"get",
+		dataType:"json",
+		success:function(data){console.log(data.value);
+			var str = '';
+			if(data.status == "success"){
+				$.each(data.value,function(index,item){
+					 str += '<tr><td class="username">'+ item.username +'</td><td class="age">'+ item.age +'</td><td>\
+							<button type="button" class="edit btn" id="'+ item.id +'">编辑</button>\
+							<button type="button" class="remove btn" id="'+ item.id +'">删除</button></td></tr>';
+				});
+				$('.table').append(str);
+				removeDom();
+				change();
+			}
+		},
+		error:function(err){
+			console.error(err);
+		}
+	});
+
+
+	function removeDom() {
+		var remove = $(".remove");
+		remove.on("click", function () {
+			var id = $(this).attr("id");
+			$(this).parent().parent().remove();
+			$.ajax({
+				url:"/users",
+				type:"delete",
+				data:id,
+				dataType: 'json',
+				success:function(data){
+					if(data.status == 'success'){
+						console.log('remove 成功', data.value);
+					}
+				},
+				error:function(xhr, status, err){
+					console.log( "remove失败"+err );
+				}
+			});
+		})
+	};
+	removeDom();
+
+	function change(){
+		var edit =$('.edit');
+		edit.on("click", function () {
+			var id = $(this).attr('id');
+
+			 $("#change_title").html("Edit User");
+			var formBtn = $("#adduser"),
+				formDiv = $('.form'),
+				submitEditBtn= $('<button type="submit" id="change_btn" class="botton">编辑</button>'),
+				usrNameInput = $('input[name="username"]'),
+				ageInput = $('input[name="age"]'),
+				usrNameTd = $(this).parent().parent().find('.username'),
+			    ageTd = $(this).parent().parent().find('.age');
+			usrNameInput.val(usrNameTd.text());
+			ageInput.val(ageTd.text());
+			formBtn.remove();
+			formDiv.append(submitEditBtn);
+
+			$("#change_btn").on("click",function(){
+				var username = usrNameInput.val();
+				var age = ageInput.val();
+				var user = {
+					username: username,
+					age: age,
+					id: id
+				};
+				$.ajax({
+					url:"/users",
+					type:"put",
+					data:JSON.stringify(user),
+					dataType:"json",
+					success:function(data){
+						if(data.status == 'success'){
+							console.log('编辑成功', data.value);
+							history.go(0);
+						}
+					},
+					error: function(xhr, status, err){
+						console.error('编辑失败' + err);
+					}
+				})
+			})
+		});
+
+	}
+	change();
+</script>
+
+<!--效果部分-->
+<script src="js/TweenLite.min.js"></script>
+<script src="js/EasePack.min.js"></script>
+<script src="js/rAF.js"></script>
+<script src="js/demo-1.js"></script>
+<!--效果部分-->

@@ -27,10 +27,10 @@ app.get('/public/js/main.js',function(req,res){
     fs.createReadStream('.'+req.url).pipe(res);
 });
 app.get('/get',function(req,res){
-    fs.readFile(db,function(err,data){
-        //console.log(data.toString());
-        res.send(data.toString());
-    });
+    //fs.readFile(db,function(err,data){
+    //    res.send(data.toString());
+    //});
+    res.send(JSON.parse(fs.readFileSync(db,'utf8')));
     //res.setHeader('Content-Type','application/json;charset=utf-8');
     //fs.createReadStream('./public/js/data.json').pipe(res);
     //res.end();
@@ -38,7 +38,7 @@ app.get('/get',function(req,res){
 });
 
 app.post('/delete',function(req,res){
-    var dbDate = require(db);
+    var dbDate = JSON.parse(fs.readFileSync(db,'utf8'));
     req.on('data',function(data){
        var id = JSON.parse(data.toString()).id;
         dbDate.forEach(function(item,index){
@@ -51,7 +51,7 @@ app.post('/delete',function(req,res){
     });
 });
 app.put('/edit/:id/:name/:age',function(req,res){
-    var dbDate = require(db);
+    var dbDate = JSON.parse(fs.readFileSync(db,'utf8'));
     var id = req.params.id;
     dbDate.forEach(function(item,index){
         if(item.id == id){
@@ -63,7 +63,7 @@ app.put('/edit/:id/:name/:age',function(req,res){
     fs.writeFileSync('./public/js/data.json',JSON.stringify(dbDate));
 });
 app.post('/add',function(req,res){
-    var dbDate = require(db);
+    var dbDate = JSON.parse(fs.readFileSync(db,'utf8'));
     var allDate = "";
     req.on('data',function(data){
         allDate += data.toString();

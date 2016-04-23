@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title.title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="ajax.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="left_container col-md-6">
+        <div class="nav">
+            <h2><%= title.nav %></h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>id</th>
+                </tr>
+                <% userList.forEach(function (item){ %>
+                <tr>
+                    <% for(var key in item){ %>
+                    <th><%= item[key] %></th>
+                    <% } %>
+                </tr>
+                <% }) %>
+            </table>
+        </div>
+    </div>
+    <div class="right_container col-md-6">
+        <div class="col-md-10 col-md-offset-1 sendInfo">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">用户名</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="name" placeholder="请输入姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="age" class="col-sm-2 control-label">年龄</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="age" placeholder="请输入年龄">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sex" class="col-sm-2 control-label">性别</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="sex" placeholder="请输入性别">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sex" class="col-sm-2 control-label">keyWord</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="keyWord" placeholder="请输入关键字">
+                    </div>
+                </div>
+                <div class="checkbox" style="text-align: center;margin-bottom: 20px">
+                    <label>
+                        <input type="radio" name="sort" value="-1">升序
+                    </label>
+                    <label>
+                        <input type="radio" name="sort" value="1">倒叙
+                    </label>
+                </div>
+            </form>
+            <div class="col-md-10 col-md-offset-1" style="text-align: center">
+                <button type="button" id="register" class="btn btn-primary">注册</button>
+                <button type="button" id="upData" class="btn btn-success">更新</button>
+                <button type="button" id="getList" class="btn btn-info">拉取列表</button>
+                <button type="button" id="deleteList" class="btn btn-warning">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    window.onload = function () {
+        function interactive(url, method, fn) {
+            var sortBy = [].filter.call(document.querySelectorAll(".checkbox input"), function (item) {
+                return item.checked == true;
+            })[0];
+            var sendData = {
+                "name": name.value,
+                "age": age.value,
+                "sex": sex.value,
+                "keyWord": keyWord.value,
+                "sortBy": sortBy ? sortBy.value : ''
+            }
+            http({
+                url: url,
+                method: method,
+                data: sendData,
+                dataType: 'json'
+            }).done(fn);
+        }
+
+        function success(data) {
+            var str = "<tr> <th>姓名</th> <th>年龄</th> <th>性别</th><th>id</th></tr>";
+            data.forEach(function (item) {
+                str += "<><td>" + item.name + "</td><td>" + item.age + "</td><td>" + item.sex + "</td><td>" + item.id + "</td></tr>";
+            })
+            table.innerHTML = str;
+        }
+
+        function getDom(id) {
+            return document.querySelector('#' + id);
+        }
+
+        var keyWord = getDom("keyWord");
+
+        var register = getDom("register");
+        var upData = getDom("upData");
+        var getList = getDom("getList");
+        var deleteList = getDom("deleteList");
+        var name = getDom("name");
+        var age = getDom('age');
+        var sex = getDom('sex');
+        var table = document.querySelector('.table');
+        //新增一个用户
+        register.addEventListener("click", function () {
+            interactive('/register', 'post', success);
+        }, false)
+        upData.addEventListener("click", function () {
+            var url = "/upData/" + keyWord.value;
+            interactive(url, 'put', success);
+        }, false)
+        getList.addEventListener("click", function () {
+            interactive('/getList', 'get', success);
+        }, false)
+        deleteList.addEventListener("click", function () {
+            var url = "/delete/" + keyWord.value;
+            interactive(url, 'delete', success);
+        }, false)
+    }
+
+</script>
