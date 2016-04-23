@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .div1 {
+            float: left;
+            width: 200px;
+            height: 150px;
+            border: 1px solid #ddd;
+        }
+
+
+    </style>
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+</head>
+<body>
+<div>
+    <div class="div1" id="div1">
+        <input type="button" value="查询全部" onclick="queryAll();"/>
+        <div></div>
+    </div>
+    <div class="div1" id="div2">
+        <input type="text" class="id2" name="id" placeholder="id"/>
+        <input type="button" value="查询" onclick="query()"/>
+        <div></div>
+    </div>
+
+    <div class="div1" id="div3">
+        <input type="text" class="name3" name="name" placeholder="name"/>
+        <input type="button" value="增加" onclick="add();"/>
+        <div></div>
+    </div>
+    <div class="div1" id="div4">
+        <input type="text" class="id4" name="id" placeholder="id"/>
+        <input type="button" class="name4" value="删除" onclick="remove()"/>
+        <div></div>
+    </div>
+    <div class="div1" id="div5">
+        <input type="text" class="id5" name="id" placeholder="id"/>
+        <input type="text" class="name5" name="name" placeholder="name"/>
+        <input type="button" value="整体更新" onclick="updateAll();"/>
+        <div></div>
+    </div>
+    <div class="div1" id="div6">
+        <input type="text" class="id6" name="id" placeholder="id"/>
+        <input type="text" class="name6" name="name" placeholder="name"/>
+        <input type="button" value="局部更新" onclick="update();"/>
+        <div></div>
+    </div>
+</div>
+<script>
+    function queryAll(){
+        $.ajax({
+            method:'get',
+            url:'/users',
+            success:function(data){
+                $('#div1').children('div').html('');
+                $(data).each(function(i,v){
+                    $('#div1').children('div').append(JSON.stringify(v));
+                })
+            }
+        })
+    }
+
+    function query(){
+        var id = $('.id2').val();
+        if(id == undefined || id == '') {
+            return;
+        }
+        $.ajax({
+            method:'get',
+            url:'/users/'+id,
+            success:function(data){
+                if(typeof data == 'string') {
+                    $('#div2').children('div').html(data);
+                    return;
+                }
+                $('#div2').children('div').html('');
+                $(data).each(function(i,v){
+                    $('#div2').children('div').append(JSON.stringify(v));
+                })
+            }
+        })
+    }
+
+    function add(){
+        var name = $('.name3').val();
+        if(name == undefined || name == '') {
+            return;
+        }
+        $.ajax({
+            method:'post',
+            url:'/users',
+            data:'name='+name,
+            success:function(data){
+                $('#div3').append(JSON.stringify(data));
+            }
+        })
+    }
+
+
+    function remove() {
+        var id = $('.id4').val();
+        if(id == undefined) {
+            return;
+        }
+        $.ajax({
+            type:'delete',
+            url:'/users/'+id,
+            success:function(data){
+                console.log(data);
+                $('#div4').append(JSON.stringify(data));
+            }
+        })
+    }
+</script>
+</body>
+</html>
