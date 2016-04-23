@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>增删改查练习</title>
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <style type="text/css">
+        .box, .content {
+            width: 500px;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .btn-mini {
+            padding: 0 6px;
+            font-size: 10.5px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+
+        table {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="box form-horizontal">
+    <div class="form-group">
+        <label for="username" class="col-sm-2 control-label">姓名</label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="username" placeholder="UserName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="age" class="col-sm-2 control-label">年龄</label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="age" placeholder="Age">
+        </div>
+    </div>
+    <div class="right">
+        <button type="button" class="btn btn-primary" onclick="save()">Save</button>
+    </div>
+</div>
+
+<div class="content">
+    <table class="table" id="list">
+        <tr>
+            <td>黄楠</td>
+            <td>18岁</td>
+            <td>
+                <button class="btn btn-mini btn-danger" type="button">Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+<script type="application/javascript">
+    var username = document.getElementById("username");
+    var age = document.getElementById("age");
+    var list = document.getElementById("list");
+    var isUpdate = 0;
+    window.onload = function () {
+        getUser();
+    }
+    function save() {
+        console.log(isUpdate);
+        if (!isUpdate) {
+            add();
+        }
+        else {
+            update();
+        }
+    }
+    function add() {
+        var user = {
+            userName: username.value,
+            age: age.value
+        };
+        ajax("/add", "post", user, function (data) {
+            if (data.code === 1) {
+                getUser();
+            }
+        })
+    }
+
+    function update() {
+        var user = {
+            userName: username.value,
+            age: age.value,
+            id: isUpdate
+        };
+        ajax("/update", "post", user, function (data) {
+            if (data.code === 1) {
+                getUser();
+                isUpdate = 0;
+                username.value = "";
+                age.value = "";
+            }
+        })
+    }
+
+    function getUser() {
+        ajax("/users", "get", function (data) {
+            var str = "";
+            for (var i = 0; i < data.length; i++) {
+                str += "<tr>";
+                str += "<td>" + data[i].userName + "</td><td>" + data[i].age + "</td><td><button type='button' class='btn btn-mini btn-warning' onclick='select(" + data[i].id + ")'>Update</button><button class='btn btn-mini btn-danger' type='button' onclick='del(" + data[i].id + ")'>Delete</button></td>";
+                str += "</tr>";
+            }
+            list.innerHTML = str;
+        })
+    }
+    function del(id) {
+        ajax("/users/" + id, "delete", function (data) {
+            if (data.code === 1) {
+                getUser();
+            }
+        })
+    }
+
+    function select(id) {
+        ajax("/users/" + id, "get", function (data) {
+            username.value = data.userName;
+            age.value = data.age;
+            isUpdate = id;
+        })
+    }
+
+    function ajax(url, method, params, callback) {
+        if (typeof params == "function") {
+            callback = params;
+            params = {};
+        }
+        var xhr = new XMLHttpRequest;
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (typeof callback === "function") {
+                    callback(xhr.response);
+                }
+            }
+        }
+        xhr.send(params && JSON.stringify(params));
+    }
+
+</script>
+</html>

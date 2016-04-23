@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>标题</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="panel-body">
+        <form action="" id="searchForm" method="post" class="form-horizontal">
+            <div class="col-xs-12" style="border: 1px solid #f5f5f5;padding: 5px;margin-bottom:5px">
+                <div class="form-group">
+                    <label class="col-xs-1 control-label">姓名：</label>
+                    <div class="col-xs-2">
+                        <input type="text" name="name" value="" class="form-control borderRadiusIE8" id="j-search-name">
+                    </div>
+                    <div class="col-xs">
+                        <button type="button" class="btn btn-primary" id="j-search-btn">查询</button>
+                        <button type="button" class="btn btn-primary" id="j-add-btn">新增</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding: 0px;margin-bottom:5px">
+                <table class="table table-bordered table-condensed table-hover table-striped">
+                    <thead>
+                        <tr class="success">
+                            <th>用户ID</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="j-tbody-cont">
+                        <!-- <tr>
+                            <td>1</td>
+                            <td>admin</td>
+                            <td>18600000000</td>
+                            <td>
+                                <a type="button" class="btn btn-default btn-sm modify-user" id="modify-user-1" data-id="1">修改</a>
+                                <a type="button" class="btn btn-default btn-sm delele-user" id="manage-pwd-1">删除</a>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <ul id="j-paginator-cont" class="pagination">
+                    <li class="active"><a title="Current page is 1">1</a></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+    <!-- ######################################################################### -->
+    <div id="myUpdateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myUpdateModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myUpdateModalLabel">修改信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="updateForm" method="post" class="form-horizontal">
+                        <input type="hidden" id="j-update-id-input" value="">
+                        <div class="form-group">
+                            <label for="j-update-name-input" class="col-sm-2 control-label">姓名:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="j-update-name-input" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="j-update-phone-input" class="col-sm-2 control-label">电话号码:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="j-update-phone-input" placeholder="">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="j-update-confirm-btn">保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- ################################################################################################################################## -->
+    <div id="myAddModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myUpdateModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×
+          </span>
+                    </button>
+                    <h4 class="modal-title" id="myUpdateModalLabel">新增</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="addForm" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="j-add-name-input" class="col-sm-2 control-label">姓名:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="j-add-name-input" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="j-add-phone-input" class="col-sm-2 control-label">电话号码:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="j-add-phone-input" placeholder="">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="j-add-confirm-btn">保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <img src="./1.jpg">
+    <script src="./index.js"></script>
+</body>
+
+</html>
