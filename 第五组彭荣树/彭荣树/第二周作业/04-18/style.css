@@ -1,0 +1,16 @@
+
+.sendInfo{
+    padding-top: 50px;
+}
+body{
+    background: url("刺客信条.jpg");
+    background-size: 100%;
+}
+.table-striped>tbody>tr:nth-child(even){
+    color: #fff;
+    background-color: darkgrey;
+}
+.left_container h2{
+    color: white;
+    text-align: center;
+}

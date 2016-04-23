@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RESTFUL</title>
+</head>
+<body>
+<div id="container">
+    <h2>用户管理:</h2>
+    查询序号：<input id="id" type="text" name="id"/><br/>
+    用户名：<input id="username" type="text" name="username"><br/>
+    密&nbsp;码：<input id="password" type="password" name="password"><br/>
+    <h2>动作：</h2>
+    <p>
+        <button id="add">注册</button>
+        <span></span></p>
+    <p>
+        <button id="getOne">查询单个成员</button>
+        <span></span></p>
+    <p>
+        <button id="getAll">查询全部成员</button>
+        <span></span></p>
+    <p>
+        <button id="updateByPut">更新单个成员信息PUT</button>
+        <span></span></p>
+    <p>
+        <button id="updateByPatch">更新单个成员PATCH</button>
+        <span></span></p>
+    <p>
+        <button id="delete">删除单个成员</button>
+        <span></span></p>
+</div>
+<table border="1" cellspadding='1' cellspacing="0" width="200">
+    <thead>
+    <th>序号</th>
+    <th>用户名</th>
+    <th>密码</th>
+    </thead>
+    <tbody id="_tbody"></tbody>
+</table>
+<script type="text/javascript">
+    window.onload = function () {
+        var container = document.getElementById('container');
+        var _tbody = document.getElementById('_tbody');
+        var tpl = '';
+        container.onclick = function (e) {
+            util.clearInfo();
+            switch (e.target.id) {
+                case 'add':
+                    _tbody.innerHTML = '';
+                        util.$ajax({
+                            type:'post',
+                            url:'/users',
+                            data:{id:document.getElementById('id').value,username:document.getElementById('username').value,password:document.getElementById('password').value},
+                            success:function(resdata){
+                                handleAdd(resdata);
+                            },
+                            fail:function(){
+                                util.setInfo('span',0,'fail');
+                            }
+                        })
+                    break;
+                case 'getOne':
+                    _tbody.innerHTML = '';
+                    util.$ajax({
+                        type: 'get',
+                        url: '/users/' + (document.getElementById('id').value ? document.getElementById('id').value : null),
+                        success: function (resdata) {
+                            handleGetOne(resdata);
+                        },
+                        fail: function () {
+                            util.setInfo('span', 1, 'fail');
+                        }
+                    })
+                    break;
+                case 'getAll':
+                    _tbody.innerHTML = '';
+                    util.$ajax({
+                        type: 'get',
+                        url: '/users',
+                        success: function (resdata) {
+                            handleGetAll(resdata);
+                        },
+                        fail: function () {
+                            util.setInfo('span', 2, 'fail');
+                        }
+                    })
+                    break;
+                case 'updateByPut':
+                    console.log('updateByPut');
+                    break;
+                case 'updateByPatch':
+                    console.log('updateByPatch');
+                    break;
+                case 'delete':
+                    console.log('delete');
+                    break;
+                default:
+                    break;
+            }
+        }
+        function handleAdd(resdata){
+            if(resdata!=''){
+                util.setInfo('span',0,'添加成功');
+            }
+        }
+        function handleGetOne(resdata) {
+            if (resdata == '') {
+                util.setInfo('span', 1, '没有结果');
+                return;
+            } else {
+                var _data = JSON.parse(resdata);
+                tpl = '<tr><td>' + _data.id + '</td><td>' + _data.username + '</td><td>' + _data.password + '</td></tr>';
+                _tbody.innerHTML = tpl;
+                util.setInfo('span', 1, '查询成功')
+            }
+            tpl = '';
+        }
+        function handleGetAll(resdata) {
+            var _data = JSON.parse(resdata);
+            for (var i = 0; i < _data.length; i++) {
+                tpl += '<tr><td>' + _data[i].id + '</td><td>' + _data[i].username + '</td><td>' + _data[i].password + '</td></tr>'
+            }
+            util.setInfo('span', 2, 'success');
+            _tbody.innerHTML = tpl;
+            tpl = '';
+        }
+    }
+
+    window.util = {
+        $ajax: function (obj) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(obj.type, obj.url, obj.async === undefined ? 'async' : obj.async);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {                              //请求状态
+                    if (xhr.status === 304 || (xhr.status >= 200 && xhr.status < 300)) {
+                        obj.success(xhr.responseText);
+                    } else {
+                        obj.fail();
+                    }
+                }
+            }
+            //xhr.setRequestHeader('Content-Type','application/json');
+            xhr.send(JSON.stringify({"id":"1"}));
+            //xhr.send(JSON.stringify(obj.data));
+        },
+        setInfo(str, index, msg){
+            var strs = document.getElementsByTagName(str);
+            for (var i = 0; i < strs.length; i++) {
+                strs[i].innerHTML = '';
+            }
+            strs[index].innerHTML = msg;
+            strs[index].style.color = 'red';
+            strs[index].style.fontWeight = 'bold';
+        },
+        clearInfo: function () {
+            var strs = document.getElementsByTagName('span');
+            for (var i = 0; i < strs.length; i++) {
+                strs[i].innerHTML = '';
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

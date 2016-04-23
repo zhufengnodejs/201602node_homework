@@ -1,0 +1,72 @@
+*{
+    margin:0;
+    padding:0;
+    font-family:"microsoft yahei";
+}
+#query{
+    width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    margin-top: 50px;
+}
+#query dl{
+    margin-top: 8px;
+}
+#query dl,#query dt,#query dd{
+    float: left;
+}
+#query dl{
+    margin-right: 5px;
+}
+#query .txt{
+    margin-right: 3px;
+    height:14px;
+    padding: 2px;
+    border:1px solid #e5ebe4;
+}
+.btn{
+    width: 70px;
+    height:20px;
+    text-align: center;
+    border:0;
+    color: #fff;;
+    background-color:#268dcd;
+    cursor: pointer;
+}
+#myMovies{
+    width: 600px;
+    overflow: hidden;
+    margin: 10px auto;
+    border:1px solid #e5ebe4;
+}
+#myMovies h2{
+    padding: 10px 0;
+    background: #f0f3f5;
+    color:#27a;
+    font-size:16px;
+    text-align: center;
+}
+#movieList ul{
+    font-size:0;
+    letter-spacing: -3px;
+}
+#movieList li{
+    display:inline-block;
+    *display:inline;
+    *zoom: 1;
+    font-size:14px;
+    letter-spacing: 0;
+    vertical-align: top;
+    border-top:1px solid #e5ebe4;
+    color: #747474;
+    width: 140px;
+    padding: 8px 5px;
+    text-align: left;
+}
+#movieList li a{
+    color: #268dcd;
+    text-decoration: none;
+}
+#movieList li a:hover{
+    color: red;
+}
