@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" href="index.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="add">
+        <label>用户名</label>
+        <input type="text" name="username" placeholder="请输入用户名" />
+        <label>年龄</label>
+        <input type="text" name="age" placeholder="请输入年龄" />
+        <span id="btn">add</span>
+    </div>
+    <div class="list">
+        <h2>All users list</h2>
+        <table  class="table" border="1">
+            <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>年龄</th>
+                    <th colspan="2">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    //前台要实现功能如下：
+        //1.将数据库的所有数据展现
+        //2.向后台数据库新增数据
+        //3.对展现的数据进行编辑或删除
+
+    //实现所有数据的展现
+    $.ajax({
+        type:"get",
+        url:"/user",
+        dataType:"json",
+        success: function (data) {
+            if(data){
+                var str = "";
+                data.forEach(function (item) {
+                    str += "<tr>";
+                    str += "<td>"+item.username+"</td>";
+                    str += "<td>"+item.age+"</td>";
+                    str += "<td><span id='edit'>edit</span></td>";
+                    str += "<td><span id='delete'>delete</span></td>";
+                    str += "</tr>";
+                });
+                $(".table tbody").html(str);
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+    //实现向数据库添加新数据
+    $("#btn").on("click", function () {
+        var userVal = $('input[name="username"]').val();
+        var ageVal = $("input[name='age']").val();
+        var userObj = {
+            username:userVal,
+            age:ageVal
+        };
+        $.ajax({
+            type:"POST",
+            url:"/user",
+            data:userObj,
+            dataType:"json",
+            success: function (data) {
+                if(data){
+                    var str = "";
+                    str += "<tr>";
+                    str += "<td>"+data.username+"</td>";
+                    str += "<td>"+data.age+"</td>";
+                    str += "<td><span id='edit'>edit</span></td>";
+                    str += "<td><span id='delete'>delete</span></td>";
+                    str += "</tr>";
+                    $(".table tbody").append(str);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    });
+    //实现删除页面中展现的数据
+    $("#delete").on("click", function () {
+
+    });
+</script>
+</html>
