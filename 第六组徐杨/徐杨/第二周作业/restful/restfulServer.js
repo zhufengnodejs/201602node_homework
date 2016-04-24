@@ -1,5 +1,5 @@
 /**
- * Created by BJF on 2016/3/14.
+ * Created by Akesure on 2016/4/14.
  */
 var path = require('path');
 var url = require('url');
@@ -77,7 +77,7 @@ app.get('/welcome', function(req,res){
     });
     rs.on('end',function(){
         res.send(html);
-    })
+    });
     rs.on('error',function(){
         res.send('访问成功，但是文件读取失败！');
     });
