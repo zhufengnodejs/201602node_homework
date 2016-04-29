@@ -1,0 +1,19 @@
+*{ padding: 0; margin: 0; }
+body{ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; box-sizing: border-box;}
+.add{ width: 202px; margin: 50px auto;}
+.add label{ display: inline-block; width: 50px; line-height: 24px;}
+.add input{ display: block; width: 200px; line-height: 24px; border-radius: 5px; outline: none; border: 1px solid #955ae7; padding-left: 6px; box-sizing: border-box;}
+.add span{ display: block; width: 70px; line-height: 28px; background: #955ae7; border-radius: 8px; text-align: center; color: #fff; margin: 10px auto 0; font-size: 18px;}
+.list{ width: 300px; margin:0 auto;}
+table{
+    border-collapse: collapse;
+    width: 300px;
+    margin-top: 10px;
+}
+table th,table td{
+    width: 75px;
+    line-height: 26px;
+    text-align: center;
+}
+.list span{display: block; width: 60px; margin: 4px auto;  background: #955ae7; border-radius: 8px; text-align: center; color: #fff; font-size: 18px;}
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <meta charset="utf-8"/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+<body>
+<section id="boxes">
+    <header id="head">
+        <h1>博客系统</h1>
+        <h2><a href="#">http://localhost:3000/</a></h2>
+        <nav>
+            <form action="/" method="get">
+                <p class="search">
+                    <span>搜索文章：</span><input type="text" name="search" value="<%= keyword %>"
+                                             placeholder="请输入文章标题或包含内容"/>&nbsp;
+                    <input type="submit" value="搜索"/>&nbsp;&nbsp;&nbsp;
+
+                    <!--提示语句显示-->
+                    <% if(success){ %>
+                    <span><%= success %></span>
+                    <% } %>
+                    <% if(error){ %>
+                    <span><%= error %></span>
+                    <% } %>
+                </p>
+                <p class="loginOrReg">
+                    <!--用户时候已经登录-->
+                    <% if(!user){ %>
+                    <span>游客,你好</span>
+                    <a href="/users/login">登录</a>
+                    <a href="/users/regist">注册</a>
+                    <% }else { %>
+                    <span><%= user.username %>,你好</span>
+                    <a href="/article/post">发表文章</a>
+                    <a href="/users/logout">退出系统</a>
+                    <% } %>
+                </p>
+            </form>
+        </nav>
+    </header>
+    <div id="content">
+

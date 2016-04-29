@@ -19,13 +19,13 @@ app.get('/',function(req,res){
     res.setHeader('Content-Type','text/html;charset=utf-8');
     fs.createReadStream('./index.html').pipe(res);
 });
-app.get('/public/minCss/main.css',function(req,res){
-    fs.createReadStream('.'+req.url).pipe(res);
-});
-app.get('/public/js/main.js',function(req,res){
-    res.setHeader('Content-Type','text/html;charset=utf-8');
-    fs.createReadStream('.'+req.url).pipe(res);
-});
+// app.get('/public/minCss/main.css',function(req,res){
+//     fs.createReadStream('.'+req.url).pipe(res);
+// });
+// app.get('/public/js/main.js',function(req,res){
+//     res.setHeader('Content-Type','text/html;charset=utf-8');
+//     fs.createReadStream('.'+req.url).pipe(res);
+// });
 app.get('/get',function(req,res){
     //fs.readFile(db,function(err,data){
     //    res.send(data.toString());

@@ -1,0 +1,10 @@
+<%- include ../template/header.ejs %>
+<div id="login">
+    <h1>登录</h1>
+    <form action="/users/login" method="post">
+        <p><span>用户名：</span><input type="text" name="username" placeholder="请输入用户名"></p>
+        <p><span>密&nbsp;码：</span><input type="password" name="password" placeholder="请输入密码"></p>
+        <p><input type="submit" value="登录"></p>
+    </form>
+</div>
+<%- include ../template/footer.ejs %>

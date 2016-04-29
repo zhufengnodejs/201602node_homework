@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RESTFUL查询示例</title>
+    <script src="main.js"></script>
+    <link type="text/css" rel="stylesheet" href="main.css"/>
+</head>
+<body>
+<div id="box">
+    <h1>RESTFUL查询示例</h1>
+    <hr/>
+    <div id="innerbox">
+        <h2>用户列表</h2>
+        <p id="choose">
+            请选择操作： <input type="radio" value="0" name="_choose" checked><label>查询全部</label>&nbsp;&nbsp;
+                        <input type="radio" value="1" name="_choose"><label>ID查询</label>&nbsp;&nbsp;
+                        <input type="radio" value="2" name="_choose"><label>添加用户</label>&nbsp;&nbsp;
+                        <input type="radio" value="3" name="_choose"><label>PUT更新</label>&nbsp;&nbsp;
+                        <input type="radio" value="4" name="_choose"><label>PATCH更新</label>&nbsp;&nbsp;
+        </p>
+        <p id="inputs">
+            <label>用户名ID:</label><input type="text" name="uid" maxlength="10" placeholder="请输入用户ID"/>&nbsp;
+            <label>用户名:</label><input type="text" name="uname" maxlength="10" placeholder="请输入用户名"/>&nbsp;
+            <label>密码：</label><input type="password" name="upwd" maxlength="13" placeholder="请输入密码"/><br/>
+        </p>
+        <p id="buttons">
+            <input type="button" value="添加用户" name="add"/>&nbsp;&nbsp;
+            <input type="button" value="查询用户" name="getById"/>&nbsp;&nbsp;
+            <input type="button" value="查询全部" name="getAll"/>
+        </p>
+
+
+        <table border="1" cellpadding="1" cellspacing="0">
+            <thead>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>密码</th>
+            <th colspan="3">操作</th>
+            </thead>
+            <tbody>
+            <!--<tr>
+                <td>0</td>
+                <td>test01</td>
+                <td>test02</td>
+                <td><input type="button" value="PUT更新" name="update_put"/></td>
+                <td><input type="button" value="PATCH更新" name="update_patch"/></td>
+                <td><input type="button" value="删除" name="delete"/></td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>test01</td>
+                <td>test02</td>
+                <td><input type="button" value="PUT更新" name="update_put"/></td>
+                <td><input type="button" value="PATCH更新" name="update_patch"/></td>
+                <td><input type="button" value="删除" name="delete"/></td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>test01</td>
+                <td>test02</td>
+                <td><input type="button" value="PUT更新" name="update_put"/></td>
+                <td><input type="button" value="PATCH更新" name="update_patch"/></td>
+                <td><input type="button" value="删除" name="delete"/></td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>test01</td>
+                <td>test02</td>
+                <td><input type="button" value="PUT更新" name="update_put"/></td>
+                <td><input type="button" value="PATCH更新" name="update_patch"/></td>
+                <td><input type="button" value="删除" name="delete"/></td>
+            </tr>-->
+
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+</div>
+</body>
+</html>
