@@ -1,0 +1,14 @@
+<%- include ../template/header.ejs %>
+<div id="regist">
+    <h1>注册</h1>
+    <form action="/users/regist" method="post">
+        <p><span>用户名:</span><input type="text" name="username" placeholder="请输入用户名"></p>
+        <p><span>密码：</span><input type="password" name="password" placeholder="请输入密码"></p>
+        <p><span>确认密码：</span><input type="password" name="repassword" placeholder="请输入确认密码"></p>
+        <p><span>邮箱：</span><input type="email" name="email" placeholder="请输入邮箱"></p>
+        <p><input type="submit" value="注册"></p>
+    </form>
+</div>
+<%- include ../template/footer.ejs %>
+
+

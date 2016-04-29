@@ -1,0 +1,89 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    font-size:16px;
+}
+#box{
+    width:800px;
+    height: auto;
+    margin:10px auto;
+    background: lightsteelblue;
+}
+#box h1 ,#box h2{
+    text-align: center;
+}
+#box h2{
+    color:darkgreen;
+    line-height: 35px;
+    padding-top:10px;
+}
+#box p{
+    width:100%;
+    margin-bottom:10px;
+    text-align: center;
+}
+input{
+    width:108px;
+    height: 33px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    outline: none;
+    font-size:18px;
+    color: blue;
+}
+#box #choose input{
+    width:30px;
+    height: 15px;
+    margin-top:8px;
+    font-size: 22px;
+}
+#box input[type='text'],#box input[type='password']{
+    height: 24px;
+    width:150px;
+    text-align: left;
+    padding-left:10px;
+    margin:5px;
+}
+#box table input{
+    width:90px;
+    height: 25px;
+    font-size: 14px;
+}
+
+table{
+    width:95%;
+    margin: 25px auto;
+}
+table th{
+    font-size:18px;
+    line-height: 25px;
+    text-align: center;
+    color: forestgreen;
+}
+table td{
+    height: 30px;
+    line-height: 25px;
+    padding-left:30px;
+    color: blue;
+    font-size:17px;
+}
+
+#update_put input[type='button'],#update_patch input[type='button'],#delete input[type='button']{
+    margin:6px auto;
+}
+
+.show{
+    display: block;
+}
+.hide{
+    display: none;
+}
+.disabled{
+    color:gray;
+}
+.enable{
+    color:blue;
+}

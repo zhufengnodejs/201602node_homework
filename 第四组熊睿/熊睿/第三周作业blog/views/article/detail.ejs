@@ -1,0 +1,26 @@
+<%- include ../template/header.ejs %>
+<h1><%= article.title %></h1>
+<p><%= article.content %></p>
+<hr/>
+<p>
+    <a href="/article/edit/<%= article._id %>">编辑</a>
+    <a href="/article/delete/<%= article._id %>">删除</a>
+</p>
+<hr/>
+评论列表：
+<ul>
+    <% article.comments.forEach(function(comment){ %>
+    <li>
+        <img src="<%= comment.user.avatar %>" alt="<%= comment.user.avatar %>"/>
+        <p><%- comment.content %></p>
+        <p><span><%= comment.user.username %></span>|<%= comment.createAt.toLocaleString() %></p>
+    </li>
+    <% }) %>
+</ul>
+<hr/>
+<form action="/article/comment" method="post">
+    <input type="hidden" name="_id" value="<%=article._id%>">
+    <textarea name="content"></textarea><br/>
+    <input type="submit" value="提交"/>
+</form>
+<%- include ../template/footer.ejs %>

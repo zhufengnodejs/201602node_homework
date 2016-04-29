@@ -1,0 +1,31 @@
+<%- include template/header.ejs %>
+<ul id="list">
+    <% articles.forEach(function (article) { %>
+    <li>
+        <img src="<%= article.poster %>" alt="<%= article.poster %>"/>
+        <h5><a href="/article/detail/<%=article._id%>"><%= article.title %></a></h5>
+        <p><%= article.content %></p>
+        <p>
+            <span>作者：</span><i><%= article.user.username %></i>|
+            <span>发表时间：</span><i><%= article.createAt.toLocaleString() %></i>
+            <span>阅读：</span><i><%= article.pv %></i>
+            <span>评论：</span><i><%= article.comments.length %></i>
+        </p>
+    </li>
+    <% }) %>
+</ul>
+
+<ul id="pagination">
+    <% if(pageNum > 1) { %>
+    <li class="outer"><a href="/?keyword=<%= keyword %>&pageNum=<%= pageNum-1 %>&pageSize=<%= pageSize %>">上一页</a></li>
+    <%} %>
+    <% for(var i = 0; i < totalPage;i++){ %>
+    <li class="<%= i==pageNum-1?'active':''%>"><a href="/?keyword=<%= keyword %>&pageNum=<%= i+1 %>&pageSize=<%= pageSize %>"><%= i+1 %></a></li>
+    <% } %>
+    <% if(pageNum < totalPage){ %>
+    <li class="outer"><a href="/?keyword=<%= keyword %>&pageNum=<%= pageNum+1 %>&pageSize=<%= pageSize %>">下一页</a></li>
+    <% } %>
+</ul>
+<%- include template/footer.ejs %>
+
+
