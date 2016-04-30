@@ -1,0 +1,22 @@
+{
+  "name": "Akblog",
+  "version": "0.0.0",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Akesure <303511012@qq.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Akesure/Akblog",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}
