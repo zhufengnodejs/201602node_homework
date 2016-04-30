@@ -28,6 +28,10 @@
             </tbody>
         </table>
     </div>
+
+<form method="get" enctype="multipart/form-data">
+
+</form>
 </body>
 <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
@@ -46,13 +50,15 @@
                 var str = "";
                 data.forEach(function (item) {
                     str += "<tr>";
-                    str += "<td>"+item.username+"</td>";
-                    str += "<td>"+item.age+"</td>";
-                    str += "<td><span id='edit'>edit</span></td>";
-                    str += "<td><span id='delete'>delete</span></td>";
+                    str += "<td class='username'>"+item.username+"</td>";
+                    str += "<td class='age'>"+item.age+"</td>";
+                    str += "<td><span class='edit' id_attr='"+item.id+"'>edit</span></td>";
+                    str += "<td><span class='delete' id_attr='"+item.id+"'>delete</span></td>";
                     str += "</tr>";
                 });
-                $(".table tbody").html(str);
+                $(".table tbody").append(str);
+                edit();
+                remove();
             }
         },
         error: function (error) {
@@ -76,12 +82,13 @@
                 if(data){
                     var str = "";
                     str += "<tr>";
-                    str += "<td>"+data.username+"</td>";
-                    str += "<td>"+data.age+"</td>";
-                    str += "<td><span id='edit'>edit</span></td>";
-                    str += "<td><span id='delete'>delete</span></td>";
+                    str += "<td class='username'>"+data.username+"</td>";
+                    str += "<td class='age'>"+data.age+"</td>";
+                    str += "<td><span class='edit' id_attr='"+data.id+"'>edit</span></td>";
+                    str += "<td><span class='delete' id_attr='"+data.id+"'>delete</span></td>";
                     str += "</tr>";
                     $(".table tbody").append(str);
+                    window.location.reload();
                 }
             },
             error: function (error) {
@@ -90,8 +97,66 @@
         })
     });
     //实现删除页面中展现的数据
-    $("#delete").on("click", function () {
+    function remove(){
+        $(".delete").on("click", function () {
+            var curRow = $(this).parents("tr");
+            var id = $(this).attr("id_attr");
+            var deleteObj = {'id':id};
+            curRow.remove();
+            $.ajax({
+                url:"/user",
+                type:"delete",
+                data:deleteObj,
+                dataType:"json",
+                success: function (data) {
+                    if(data){
+                        console.log(data);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        });
+    }
+    //实现点击编辑时，重新对数据进行修改并上传到数据库
+    function edit(){
+        $(".edit").on("click", function () {
+            var usernameVal = $(this).parents("tr").find(".username").text();
+            var ageVal = $(this).parents("tr").find(".age").text();
+            var userInput = $('input[name="username"]');
+            var ageInput = $("input[name='age']");
+            var addBtn = $("#btn");
+            var editSubmit = $("<span id='submit'>submit</span>");
+            var curId = $(this).attr("id_attr");
+            addBtn.remove();
+            userInput.val(usernameVal);
+            ageInput.val(ageVal);
+            $(".add").append(editSubmit);
+            $("#submit").on("click", function () {
+                var userVal = $('input[name="username"]').val();
+                var ageVal = $("input[name='age']").val();
+                var userObj = {
+                    "username":userVal,
+                    "age":ageVal,
+                    "id":curId
+                };
+                $.ajax({
+                    type:"put",
+                    url:"/user",
+                    data:userObj,
+                    dataType:"json",
+                    success: function (data) {
+                        if(data){
+                            window.location.reload();
+                        }
+                    },
+                    error: function (error) {
 
-    });
+                    }
+                })
+            })
+        });
+    }
 </script>
 </html>
