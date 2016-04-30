@@ -1,15 +1,11 @@
-/**
- * Created by HOME on 2016/4/20.
- */
 var express = require('express'),
-    app = express(),
-    bodyParser = require('body-parser'),
-    fs = require('fs'),
-    path = require('path'),
-    url = require('url'),
-    http = require('http'),
-    db = './public/js/data.json';
-    //queryString = require('query');
+app = express(),
+bodyParser = require('body-parser'),
+fs = require('fs'),
+path = require('path'),
+url = require('url'),
+http = require('http'),
+db = 'js/data.json';
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname+'/public')));
 app.use(function(req,res,next){
@@ -19,22 +15,15 @@ app.get('/',function(req,res){
     res.setHeader('Content-Type','text/html;charset=utf-8');
     fs.createReadStream('./index.html').pipe(res);
 });
-// app.get('/public/minCss/main.css',function(req,res){
-//     fs.createReadStream('.'+req.url).pipe(res);
-// });
-// app.get('/public/js/main.js',function(req,res){
-//     res.setHeader('Content-Type','text/html;charset=utf-8');
-//     fs.createReadStream('.'+req.url).pipe(res);
-// });
+app.get('/css/index.css',function(req,res){
+    fs.createReadStream('.'+req.url).pipe(res);
+});
+app.get('/js/index.js',function(req,res){
+    res.setHeader('Content-Type','text/html;charset=utf-8');
+    fs.createReadStream('.'+req.url).pipe(res);
+});
 app.get('/get',function(req,res){
-    //fs.readFile(db,function(err,data){
-    //    res.send(data.toString());
-    //});
     res.send(JSON.parse(fs.readFileSync(db,'utf8')));
-    //res.setHeader('Content-Type','application/json;charset=utf-8');
-    //fs.createReadStream('./public/js/data.json').pipe(res);
-    //res.end();
-    //
 });
 
 app.post('/delete',function(req,res){
@@ -47,7 +36,7 @@ app.post('/delete',function(req,res){
             }
         });
         res.send(JSON.stringify(dbDate));
-        fs.writeFileSync('./public/js/data.json',JSON.stringify(dbDate));
+        fs.writeFileSync('./js/data.json',JSON.stringify(dbDate));
     });
 });
 app.put('/edit/:id/:name/:age',function(req,res){
@@ -60,7 +49,7 @@ app.put('/edit/:id/:name/:age',function(req,res){
         };
     });
     res.send(JSON.stringify(dbDate));
-    fs.writeFileSync('./public/js/data.json',JSON.stringify(dbDate));
+    fs.writeFileSync('./js/data.json',JSON.stringify(dbDate));
 });
 app.post('/add',function(req,res){
     var dbDate = JSON.parse(fs.readFileSync(db,'utf8'));
@@ -77,7 +66,7 @@ app.post('/add',function(req,res){
         };
         dbDate.push(obj);
         res.send(JSON.stringify(dbDate));
-        fs.writeFileSync('./public/js/data.json',JSON.stringify(dbDate));
+        fs.writeFileSync('./js/data.json',JSON.stringify(dbDate));
     });
 });
-app.listen(8081);
+app.listen(5000);

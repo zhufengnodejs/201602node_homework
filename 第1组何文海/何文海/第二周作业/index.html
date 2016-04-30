@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <!--<link rel="stylesheet" href="bootstrap.min.css" />-->
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+<div class="main">
+    <div class="headr" id="header">
+        <div class="ke">KEY:
+            <input class="input-text" type="text" name="username" value="" placeholder="KEY"/>
+        </div>
+        <div class="val">VALUE:
+            <input class="input-text" type="text" name="age" value="" placeholder="VALUE"/>
+        </div>
+        <input type="submit" value="submit" id="add" class="btn_m_l_20 btn btn-submit"/>
+        <input type="submit" value="select" id="select" class="btn_m_l_20 btn btn-selcet "/>
+
+        <input type='submit' value='edit' id='edit' class='btn_m_l_20 btn btn-edit ' />
+        <input type='submit' value='delete' id='delete' class='btn_m_l_20 btn btn-delete  ' />
+
+    </div>
+    <div class="sub_result" id="result">
+        <!--<ul>-->
+        <!--<li>-->
+        <!--key:<input type="text" id="result_key" name="username" value="dafadfa"/>-->
+        <!--val:<input type="text" id="result_val" value="dafdsfasd"/>-->
+        <!--<input type="submit" value="delete" id="add" class="btn_m_l_20 btn btn-delete btn_f_r " />-->
+        <!--<input type="submit" value="edit" id="edit" class="btn_m_l_20 btn btn-edit btn_f_r" />-->
+
+        <!--</li>-->
+
+        <!--</ul>-->
+
+    </div>
+
+    <div class="sub_history">
+
+        <ul>
+            <li>
+                <!--<span class="result_key">key:dfdd</span>-->
+                <!--<span class="result_val">val:dfddddd</span>-->
+                <!--<input type="submit" value="rollback" id="rollback" class=" btn btn_f_r btn-rollback"/>-->
+
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+
+</body>
+
+<script src="/jquery.min.js"></script>
+<script type="text/javascript">
+    var $result = $('#result');
+
+    $("#select").on('click', function () {
+        search();
+    });
+    $("#add").on('click',function(){
+        console.log("1")
+        add();
+    })
+    $("#delete").on('click',function(){
+        console.log("1")
+        del();
+    })
+
+    function quire() {
+        var username = $("input[name='username']").val();
+        var age = $("input[name='age']").val();
+        var userObj = {
+            name: username,
+           age: age
+        }
+        return userObj;
+    }
+
+
+    function search() {
+        var quireDb = quire();
+        var p = null;
+        if (quireDb.name) {
+
+            p = quireDb.name;
+            console.log("t" + p);
+        } else if (quireDb.age) {
+            p = "age/" + quireDb.age;
+            console.log("f" + p);
+        } else if (!quireDb.name && !quireDb.age) {
+
+            p = "err/err";
+            console.log(p)
+        }
+        $.ajax({
+            type: 'get',
+            url: '/users/' + p,
+            dataType: 'json',
+            success: function (data) {
+                var str = "";
+                str += "<ul>";
+                str += "<li>key:<input type='text' id='result_key' name='inputName' value='" + data.name + "'/>value:<input type='text' id='result_val' name='inputAge' value='" + data.age + "'/></li>";
+                str += "</ul>";
+                $result.html(str);
+
+            }
+
+        });
+    }
+
+    function add(){
+
+        var quireDb = quire();
+        console.log(quireDb);
+        $.ajax({
+            type: 'post',
+            url: '/users/a',
+            data:quireDb,
+            dataType: 'json',
+            success: function (data) {
+                var str = "";
+                str += "<ul>";
+                str += "<li>key:<input type='text' id='result_key'  name='inputName' value='" + data.name + "'/>value:<input type='text' id='result_val' name='inputAge' value='" + data.age + "'/><input type='submit' value='delete' id='add' class='btn_m_l_20 btn btn-delete btn_f_r ' /><input type='submit' value='edit' id='edit' class='btn_m_l_20 btn btn-edit btn_f_r' /></li>";
+                str += "</ul>";
+                console.log(str);
+                $result.html(str);
+            }
+        });
+    }
+    function del(){
+
+        var quireDb = quire();
+        console.log(quireDb);
+        $.ajax({
+            type: 'DELETE',
+            url: '/users/'+quireDb.name,
+            dataType: 'json',
+            success: function (data) {
+//                var str = "";
+//                str += "<ul>";
+//                str += "<li>key:<input type='text' id='result_key'  name='inputName' value='" + data.name + "'/>value:<input type='text' id='result_val' name='inputAge' value='" + data.age + "'/><input type='submit' value='delete' id='add' class='btn_m_l_20 btn btn-delete btn_f_r ' /><input type='submit' value='edit' id='edit' class='btn_m_l_20 btn btn-edit btn_f_r' /></li>";
+//                str += "</ul>";
+//                console.log(str);
+//                $result.html(str);
+            }
+        });
+    }
+
+
+
+
+
+
+</script>
+
+</html>

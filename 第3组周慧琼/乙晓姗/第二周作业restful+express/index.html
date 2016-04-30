@@ -128,7 +128,7 @@
             $.ajax({
                 url: '/users',
                 type: 'delete',
-                data: '{"deleteId": id}',
+                data: {"deleteId": id},
                 dataType: 'json',
                 success: function (data) {
                     if (data.status == 'success') {

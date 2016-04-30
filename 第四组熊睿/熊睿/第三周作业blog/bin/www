@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+
+/** -x:模块依赖 */
+var app = require('../app');      // —x:引入.app文件,app = express();其本质是一个回调函数
+var debug = require('debug')('02_NODE_EXPRESS_BLOG:server');  //-x:日志记录器，通过修改DEBUG环境变量来改变日志输出 SET DEBUG=02_NODE_EXPRESS_BLOG:*
+var http = require('http');       //-x:引入http模块
+
+/** -x:从环境变量中获取端口并保存到express中 SET PORT=9000;*/
+var port = normalizePort(process.env.PORT || '3000'); //获取环境变量端口,如果没有默认为3000
+app.set('port', port);                                //-x:设置端口
+
+/** -x:创建http服务器 */
+var server = http.createServer(app);
+
+/** -x:监听端口号，错误处理，监听处理等 */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/** -x:格式化端口 */5
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+  if (isNaN(port)) {
+    return val;       //named pipe
+  }
+  if (port >= 0) {
+    return port;      //port number
+  }
+  return false;
+}
+
+/** -x:error事件 */
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+  switch (error.code) { // handle specific listen errors with friendly messages
+    case 'EACCES':      // -x: 没有权限,linux下不允许使用1000以下端口，80端口必须root用户使用
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);  // -x: 正常退出，0-异常退出
+      break;
+    case 'EADDRINUSE':  // -x：端口被占用
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/** -x:listen事件*/
+function onListening() {
+  var addr = server.address();          // -x:绑定地址
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);        // -x:输出监听情况
+}

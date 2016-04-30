@@ -1,0 +1,13 @@
+<%- include ../template/header.ejs %>
+<div id="post">
+    <h1>发表文章</h1>
+    <form action="/article/post" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_id" value="<%=article._id%>">
+        <p><span>标题：</span><input type="text" name="title" placeholder="请输入标题" value="<%= article.title %>"></p>
+        <p><span>正文：</span><textarea name="content" placeholder="请输入内容"><%= article.content %></textarea></p>
+        <p><img src="<%=article.poster%>" alt="<%=article.poster%>"/></p>
+        <p><span>图片：</span><input type="file" name="poster"></p>
+        <p><input type="submit" value="发表"></p>
+    </form>
+</div>
+<%- include ../template/footer.ejs %>
