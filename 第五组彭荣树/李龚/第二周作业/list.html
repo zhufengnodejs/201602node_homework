@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <style>
+        *{margin:0; padding:0;}
+        body{width:80%; margin:0 auto; font-size:12px; padding:20px 0;}
+        button{border:0; border-radius:6px; display: inline-block; margin: 0 20px;}
+        form{border-bottom:1px solid #ccc; padding-bottom:20px; margin-bottom: 30px;}
+        table{border-collapse:collapse; border-spacing: 0; width:100%;}
+        td{padding:10px 0; text-align: center; vertical-align: middle;border-bottom:1px solid #ccc;}
+        .form-group{margin-bottom:18px; display: inline-block; margin-right: 20px;}
+        .form-group input[type='text']{height:24px; line-height: 24px; font-size:12px; padding:0 10px;}
+        .btn-main{margin:0 auto; display:inline-block; padding:5px 10px; background:#3543ff; color:#fff; font-size:14px;}
+        .btn{margin:0 8px; display:inline-block; padding:5px 10px; background:#3543ff; color:#fff; font-size:14px;}
+    </style>
+</head>
+<body>
+<form id="form">
+    <div class="form-group">
+        <label for="username">姓名</label>
+        <input type="text" class="text" name="username" id="username" placeholder="姓名"/>
+    </div>
+    <div class="form-group">
+        <label for="age">岁数</label>
+        <input type="text" class="text" name="age" id="age" placeholder="岁数"/>
+    </div>
+    <button type="submit" class="btn-main" id="add">提交</button>
+</form>
+<table id="table">
+    <thead>
+        <tr>
+            <th width="26%">姓名</th>
+            <th width="26%">岁数</th>
+            <th width="48%">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--<tr>
+            <td>123</td>
+            <td>123</td>
+            <td>
+                <button type="button" class="btn edit">编辑</button>
+                <button type="button" class="btn remove">删除</button>
+            </td>
+        </tr>-->
+    </tbody>
+</table>
+</body>
+</html>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>
+    $.ajax({
+        url: '/users',
+        type: 'get',
+        dataType: 'json',
+        success: function(data){
+            console.log(data);
+            var str = "";
+            for(var key in data){
+                str +=  '<tr>'+
+                        '<td class="username">'+ data[key].username +'</td>'+
+                        '<td class="age">'+ data[key].age +'</td>'+
+                        '<td>'+
+                        '<button type="button" class="btn edit" id_attr="'+data[key].id+'">编辑</button>'+
+                        '<button type="button" class="btn remove" id_attr="'+data[key].id+'">删除</button>'+
+                        '</td>'+
+                        '</tr>';
+            }
+            $('#table tbody').append(str);
+            remove();
+            edit();
+        },
+        error: function (xhr, status, err) {
+            console.error(err);
+        }
+    });
+
+    $('#add').on('click', function(){
+        var username = $('input[name="username"]').val();
+        var age = $('input[name="age"]').val();
+        var user = {
+            username: username,
+            age: age
+        };
+        $.ajax({
+            url: '/users',
+            type: 'post',
+            data: user,
+            dataType: 'json',
+            success: function(data){
+                console.log(data);
+                str +=  '<tr>'+
+                        '<td>'+ data.username +'</td>'+
+                        '<td>'+ data.age +'</td>'+
+                        '<td>'+
+                        '<button type="button" class="btn edit" id_attr="'+data.id+'">编辑</button>'+
+                        '<button type="button" class="btn remove" id_attr="'+data.id+'">删除</button>'+
+                        '</td>'+
+                        '</tr>';
+                $('#table tbody').append(str);
+            },
+            error: function(xhr, status, err){
+                console.error('Add fail' + err);
+            }
+        });
+    });
+
+    function remove(){
+        $('.remove').on('click', function(){
+            $(this).parent().parent().remove();
+            var id = $(this).attr('id_attr');
+            $.ajax({
+                url: '/users/'+id,
+                type: 'delete',
+                data: id,
+                dataType: 'json',
+                success: function(data){
+                    if(data.status == 'success'){
+                        console.log('remove success', data.value);
+                    }
+                },
+                error: function(xhr, status, err){
+                    console.error('Add fail' + err);
+                }
+            });
+        });
+    }
+
+    //Edit user
+    function edit(){
+        $('.edit').on('click', function(){
+            var id = $(this).attr('id_attr');
+            var formTitle = $('.form-title'),
+                formBtn = $('#form button'),
+                formDiv = $('#form'),
+                submitEditBtn= $('<button type="submit" class="btn-main" id="submitEdit">编辑</button>'),
+                usrNameInput = $('input[name="username"]'),
+                ageInput = $('input[name="age"]'),
+                usrNameTd = $(this).parent().siblings('.username'),
+                ageTd = $(this).parent().siblings('.age');
+
+            formTitle.text('Edit user');
+            formBtn.remove();
+            formDiv.append(submitEditBtn);
+            usrNameInput.val(usrNameTd.text());
+            ageInput.val(ageTd.text());
+
+            $('#submitEdit').on('click', function(){
+                var username = usrNameInput.val();
+                var age = ageInput.val();
+                var user = {
+                    username: username,
+                    age: age,
+                    id: id
+                };
+                $.ajax({
+                    url: '/users/'+id,
+                    type: 'put',
+                    data: user,
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.status == 'success'){
+                            console.log('Edit success', data.value);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr, status, err){
+                        console.error('Edit fail' + err);
+                    }
+                });
+            });
+        });
+    }
+
+</script>

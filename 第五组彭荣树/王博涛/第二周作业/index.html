@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>增删改查</title>
+</head>
+<body>
+<input type="text" id="addTxt"/><input type="button" value="增加" id="add"/>
+<ul class="list">
+
+</ul>
+
+<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+<script>
+    $(function () {
+        function loadList() {
+            $.ajax({
+                type: "GET",
+                url: "/users",
+                dataType: "json",
+                success: function (data) {
+                    ;
+                    var str = "";
+                    for (var key in data) {
+                        str += "<li><span>" + data[key].id + "</span><p>" + data[key].name + "</p><input type='button' value='删除' class='delate'></li>";
+                    }
+                    $(".list").append(str);
+                }
+            });
+        }
+
+        loadList();
+
+        $("#add").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "/users",
+                dataType: "json",
+                data: {name: $("#addTxt").val()},
+                success: function (data) {
+                    var str2 = "<li><span>" + data.id + "</span><p>" + data.name + "</p><input type='button' value='删除' class='delate'></li>";
+                    $(".list").append(str2);
+                }
+            });
+        })
+    })
+</script>
+</body>
+</html>
